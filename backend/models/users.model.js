@@ -3,29 +3,28 @@ const { timestamp } = require('rxjs')
 
 const userSchema = mongoose.Schema({
     name:{
-        type: String,
-        required:[false]
+        type: String
+        
     },
     role:{
         type: String,
         required:[true]
     }, 
-    mail:{
+    email:{
         type: String,
         required: [true, "please enter a valid e mail"] ,
-        unique: [true, "email must be unique"],
-        select: false
+        
      
     },
-    pw:{
+    password:{
         type: String,
         required: [true, "please enter a valid password"]
     },
-    forgotPwCode:{
-        type: String,
+    verificationCode:{
+        type: Number,
         select: false
     },
-    forgotPwCodeValidation:{
+    verificationCodeExpires:{
         type: Number,
         select: false
     },
@@ -33,13 +32,19 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      
+      token: {
+type: String
+      },
     timestamp:{
         type:Date,
         default:Date.now
     }
 
 })
+userSchema.index({ email: 1 }, { unique: true });
 
 const User = mongoose.model("User", userSchema)
+User.createIndexes();  // This explicitly creates the index
 
 module.exports = User;

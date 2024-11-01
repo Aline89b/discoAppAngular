@@ -8,7 +8,7 @@ const userRoute = require('./routes/userRoute')
 const mongoose = require('mongoose')
 const User = require('./models/users.model')
 
-app.use(cors())
+app.use(cors({ origin: 'http://localhost:4200' }))
 app.use(helmet())
 app.use(cookieParser())
 app.use(express.json())
