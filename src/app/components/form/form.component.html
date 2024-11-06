@@ -1,1 +1,215 @@
-<p>form works!</p>
+<div class="bg-white p-6 rounded-lg shadow-md  mt-6 mb-6 ">
+  <form class="space-y-4 flex flex-col" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="max-w-md "  *ngIf="dataType === 'Company'">
+      <div>
+        <h2 class="text-xl font-semibold mb-6 text-center">Create the company</h2>
+      </div>
+      
+
+      <label>Name</label>
+      <input formControlName="name" class="input input-bordered w-full mb-4" />
+
+      <label>Regione Sociale</label>
+      <input
+        formControlName="regione_sociale"
+        type="text"
+        class="input input-bordered w-full mb-4"
+      />
+
+      <label>Partita IVA</label>
+      <input
+        formControlName="PI"
+        type="text"
+        class="input input-bordered w-full mb-4"
+      />
+
+      <label>Codice Univoco</label>
+      <input
+        formControlName="SDI"
+        type="text"
+        class="input input-bordered w-full mb-4"
+      />
+
+      <label>Email</label>
+      <input
+        formControlName="email"
+        type="email"
+        class="input input-bordered w-full mb-4"
+      />
+      <span *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-red-500 text-sm">
+        Please enter a valid email.
+      </span>
+
+      <label>Telefono</label>
+      <input
+        type="tel"
+        formControlName="phone"
+        class="input input-bordered w-full mb-4"
+        placeholder="+1234567890"
+      />
+      <span *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="text-red-500 text-sm">
+        Please enter a valid phone number.
+      </span>
+
+      <label>Address</label>
+      <input
+        type="text"
+        formControlName="address"
+        placeholder="Enter address"
+        class="input input-bordered w-full"
+        autocomplete="off"
+      />
+    
+      <!-- Dropdown menu for autocomplete suggestions -->
+      
+        <ul 
+          *ngIf="filteredOptions | async as options"
+          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full mt-1"
+          [ngStyle]="{ 'display': isVisible ? 'block' : 'none' }"
+        >
+          <li
+            *ngFor="let option of options"
+            (click)="selectOption(option)"
+            class="p-2 hover:bg-primary hover:text-primary-content cursor-pointer"
+          >
+            {{ option.display_name }}
+          </li>
+        </ul>
+      
+
+      <label class="label">City</label>
+      <input
+        type="text"
+        formControlName="city"
+        placeholder="City"
+        class="input input-bordered w-full"
+        readonly
+      />
+
+      <label class="label">Zip Code</label>
+      <input
+        type="text"
+        formControlName="zipCode"
+        placeholder="Zip Code"
+        class="input input-bordered w-full"
+        readonly
+      />
+    </div>
+
+    <div class="card-body" *ngIf="dataType === 'Locale'">
+      <h2 class="text-xl font-semibold mb-6 text-center">Create the Place</h2>
+      <label>Name</label>
+      <input formControlName="name" class="input input-bordered w-full mb-4" />
+
+      <label>Address</label>
+      <input
+        type="text"
+        formControlName="address"
+        placeholder="Enter address"
+        class="input input-bordered w-full"
+        autocomplete="off"
+      />
+    
+      <!-- Dropdown menu for autocomplete suggestions -->
+      
+        <ul
+          *ngIf="filteredOptions | async as options"
+          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full mt-1"
+          [ngStyle]="{ 'display': isVisible ? 'block' : 'none' }"
+        >
+          <li
+            *ngFor="let option of options"
+            (click)="selectOption(option)"
+            class="p-2 hover:bg-primary hover:text-primary-content cursor-pointer"
+          >
+            {{ option.display_name }}
+          </li>
+        </ul>
+      
+
+      <label class="label">City</label>
+      <input
+        type="text"
+        formControlName="city"
+        placeholder="City"
+        class="input input-bordered w-full"
+        readonly
+      />
+
+      <label class="label">Zip Code</label>
+      <input
+        type="text"
+        formControlName="zipCode"
+        placeholder="Zip Code"
+        class="input input-bordered w-full"
+        readonly
+      />
+    
+      <label>Capacity</label>
+      <input
+        formControlName="capacity"
+        type="number"
+        class="input input-bordered w-full mb-4"
+      />
+    </div>
+
+    <div class="card-body" *ngIf="dataType === 'Event'">
+      <h2 class="text-xl font-semibold mb-6 text-center">Create the event</h2>
+      <label>Name</label>
+      <input formControlName="name" class="input input-bordered w-full mb-4" />
+
+      <label>Locale</label>
+      <input
+        type="text"
+        formControlName="locale"
+        placeholder="Enter place"
+        class="input input-bordered w-full"
+        autocomplete="off"
+      />
+    
+      <!-- Dropdown menu for autocomplete suggestions -->
+      
+        <ul
+          *ngIf="filteredLocali | async as locali"
+          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full mt-1"
+          [ngStyle]="{ 'display': isVisible ? 'block' : 'none' }"
+        >
+          <li
+            *ngFor="let locale of locali"
+            (click)="selectLocale(locale)"
+            class="p-2 hover:bg-primary hover:text-primary-content cursor-pointer"
+          >
+            {{ locale.name }} {{locale.address}}
+          </li>
+        </ul>
+      <label>Date</label>
+      <input
+        formControlName="date"
+        type="date"
+        class="input input-bordered w-full mb-4"
+      />
+
+      <label>Time</label>
+      <input
+        formControlName="time"
+        type="time"
+        class="input input-bordered w-full mb-4"
+      />
+
+      <label>Price</label>
+      <input
+        formControlName="price"
+        type="number"
+        class="input input-bordered w-full mb-4"
+      />
+    </div>
+
+    <button
+      class="btn btn-primary self-center"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Submit
+    </button>
+  </form>
+</div>

@@ -6,3 +6,5 @@ return res.status(403).json({message:'access denied!'})
         next()
     }
 }
+
+module.exports= authorizeRole

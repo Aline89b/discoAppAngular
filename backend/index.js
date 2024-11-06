@@ -3,7 +3,13 @@ const cors = require("cors")
 const helmet = require("helmet")
 const cookieParser = require("cookie-parser")
 const app = express()
+
 const userRoute = require('./routes/userRoute')
+const eventRoute = require('./routes/eventRoute')
+const listRoute = require('./routes/listRoute')
+const localeRoute = require('./routes/localeRoute')
+const companyRoute = require('./routes/companyRoute')
+
 
 const mongoose = require('mongoose')
 const User = require('./models/users.model')
@@ -13,8 +19,16 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use('/api/users', userRoute)
 
+app.use('/api/users', userRoute)
+app.use('/api/companies', companyRoute)
+app.use('/api/locali', localeRoute)
+app.use('/api/events', eventRoute)
+/*
+
+app.use('/api/lists',listRoute)
+
+*/
 
 app.get("/", (req, res)=>{
     res.send("hello babe")

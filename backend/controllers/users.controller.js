@@ -198,7 +198,7 @@ const verifyUser = async (req, res) => {
   try {
     if (user.token === token) {
       await User.updateOne({ _id: id }, { $set: { verified: true } });
-      await Token.findByIdAndRemove(token._id);
+      //await Token.findByIdAndRemove(token._id);
       return res.redirect("http://localhost:4200/verify?status=success");
     }
   } catch (error) {

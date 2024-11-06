@@ -6,6 +6,12 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { ResetPWComponent } from './components/reset-pw/reset-pw.component';
 import { authGuard } from './auth.guard';
 import { CreateLocaleComponent } from './components/create-locale/create-locale.component';
+import { CreateCompanyComponent } from './components/create-company/create-company.component';
+import { createComponent } from '@angular/core';
+import { CreateEventComponent } from './components/create-event/create-event.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { LocalsListComponent } from './components/locals-list/locals-list.component';
+import { EventsListComponent } from './components/events-list/events-list.component';
 
 export const routes: Routes = [
   
@@ -20,5 +26,15 @@ export const routes: Routes = [
   { path: 'invite-user', component: AuthFormComponent, canActivate: [authGuard],
     data: { roles: ['admin'] }, },
     { path: 'create-locale', component: CreateLocaleComponent, canActivate: [authGuard],
-      data: { roles: ['admin'] }, }
+      data: { roles: ['admin'] }, },
+    { path: 'create-company', component: CreateCompanyComponent, canActivate: [authGuard],
+        data: { roles: ['admin'] }, },
+        { path: 'create-event', component: CreateEventComponent, canActivate: [authGuard],
+          data: { roles: ['admin'] }, },
+          { path: 'profile', component: ProfileComponent, canActivate: [authGuard],
+            data: { roles: ['admin'] }, },
+            { path: 'local-list', component: LocalsListComponent, canActivate: [authGuard],
+              data: { roles: ['admin'] }, },
+              { path: 'event-list', component: EventsListComponent, canActivate: [authGuard],
+                data: { roles: ['admin'] }, },
 ];
