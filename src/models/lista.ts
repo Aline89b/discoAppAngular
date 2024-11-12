@@ -1,8 +1,12 @@
 import { Guest } from "./guest";
 
 export interface GuestList {
+  _id:string,
     name: string;
-    event: string; // event ID or event name
+    event: {
+      id: string,
+      name: string
+    } 
     guests: Guest[];
     createdBy: string
   }

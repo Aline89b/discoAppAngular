@@ -12,6 +12,8 @@ import { CreateEventComponent } from './components/create-event/create-event.com
 import { ProfileComponent } from './components/profile/profile.component';
 import { LocalsListComponent } from './components/locals-list/locals-list.component';
 import { EventsListComponent } from './components/events-list/events-list.component';
+import { GuestListComponent } from './components/guest-list/guest-list.component';
+import { CreateGuestListComponent } from './components/create-guest-list/create-guest-list.component';
 
 export const routes: Routes = [
   
@@ -33,8 +35,12 @@ export const routes: Routes = [
           data: { roles: ['admin'] }, },
           { path: 'profile', component: ProfileComponent, canActivate: [authGuard],
             data: { roles: ['admin'] }, },
-            { path: 'local-list', component: LocalsListComponent, canActivate: [authGuard],
+            { path: 'locals-list', component: LocalsListComponent, canActivate: [authGuard],
               data: { roles: ['admin'] }, },
-              { path: 'event-list', component: EventsListComponent, canActivate: [authGuard],
+              { path: 'events-list', component: EventsListComponent, canActivate: [authGuard],
                 data: { roles: ['admin'] }, },
+                { path: 'create-guest-list', component: CreateGuestListComponent, canActivate: [authGuard],
+                  data: { roles: ['admin'] }, },
+                  { path: 'guest-list', component: GuestListComponent, canActivate: [authGuard],
+                    data: { roles: ['admin'] }, },
 ];

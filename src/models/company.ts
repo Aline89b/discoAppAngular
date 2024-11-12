@@ -1,4 +1,5 @@
 export interface Company {
+  _id:string,
     name: string;
     regione_sociale: string; // event ID or event name
     PI: string;

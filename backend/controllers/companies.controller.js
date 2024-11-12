@@ -1,5 +1,6 @@
 const { companySchema } = require("../middlewares/validators");
-const Company = require("../models/company.model")
+const Company = require("../models/company.model");
+const User = require("../models/users.model");
 
 const getCompanies = async(req, res)=>{
     try {
@@ -56,12 +57,41 @@ const addCompany = async(req, res) =>{
         .json({ success: false, message: "company already exists" });
     }
         const company = await Company.create({ name, regione_sociale,PI, SDI,address,city,zipCode,phone,email,userId })
-        
-        console.log(company)
-        res.status(200).json({message:'company created successfully'})
+        const companyId = company._id
+        console.log(companyId)
+        const updatedUser = await User.findByIdAndUpdate({ _id: userId },
+            {
+              $set: { companyId: companyId  },
+            }
+          );
+            
+         
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        console.log(company, updatedUser)
+        res.status(200).json({message:'company created successfully',company,
+             updatedUser})
     } catch (error) {
         res.status(500).json({message:error.message})
     }
 }
 
-module.exports = {addCompany,getCompanies,getCompanyByOwnerId}
+const deleteCompany = async (req, res) => {
+    try {
+      const { id } = req.params;
+      console.log(id)
+      const company = await Company.findByIdAndDelete(id);
+     
+      if (!company) {
+        return res.status(404).json({ message: "company not found" });
+      }
+      const updatedCompanies = await Company.find({});
+      res.status(200).json(updatedCompanies);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+module.exports = {addCompany,getCompanies,getCompanyByOwnerId, deleteCompany}

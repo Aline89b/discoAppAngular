@@ -24,4 +24,19 @@ const createLocale = async(req,res)=>{
     }
 }
 
-module.exports= {createLocale,getLocali}
+const deleteLocale= async(req, res)=>{
+    try {
+        const { id } = req.params;
+        console.log(id)
+        const locale = await Locale.findByIdAndDelete(id);
+       
+        if (!locale) {
+          return res.status(404).json({ message: "locale not found" });
+        }
+        const updatedLocali = await Event.find({});
+        res.status(200).json(updatedLocali);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+}
+module.exports= {createLocale,getLocali, deleteLocale}

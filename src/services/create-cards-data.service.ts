@@ -15,7 +15,7 @@ companyUrl = "http://localhost:3000/api/companies"
 eventUrl = "http://localhost:3000/api/events"
 localeUrl = "http://localhost:3000/api/locali"
 listUrl = "http://localhost:3000/api/lists"
-guestUrl = "http://localhost:3000/api/guests"
+guestUrl = "http://localhost:3000/api/lists"
 
 
   constructor(private http: HttpClient) { }
@@ -28,17 +28,23 @@ guestUrl = "http://localhost:3000/api/guests"
     return this.http.post(this.companyUrl, {companyData})
 
   }
-  addGuest(guestData:Guest): Observable<any>{
-    return this.http.post(this.guestUrl, {guestData})
+  addGuest(guestData:Guest,listId:string): Observable<any>{
+    return this.http.post(`${this.guestUrl}/${listId}/guests `, {guestData})
 
   }
   addList(listData: GuestList): Observable<any>{
-    return this.http.post(this.listUrl, {listData})
+    return this.http.post( this.listUrl , {listData})
 
   }
   addLocale(localeData: locale): Observable<any>{
     return this.http.post(this.localeUrl, {localeData})
 
   }
+  deleteList(id:string) {
+    return this.http.delete(`${this.listUrl}/${id}`)
+
+  }
+
+  
 
 }

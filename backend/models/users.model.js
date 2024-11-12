@@ -32,6 +32,12 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
+        required:false
+        
+      },
       
       token: {
 type: String

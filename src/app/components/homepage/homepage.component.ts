@@ -3,12 +3,13 @@ import {CookieService} from 'ngx-cookie-service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 import { FooterComponent } from '../footer/footer.component';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [NavbarComponent,BottomNavComponent,FooterComponent],
+  imports: [NavbarComponent,BottomNavComponent,FooterComponent,RouterLink],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.css'
 })

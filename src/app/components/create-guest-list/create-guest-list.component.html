@@ -1,0 +1,52 @@
+<div class="flex items-center justify-center h-[calc(100vh-74px)] overflow-auto bg-gray-100">
+
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-6 text-center">
+            create guest list
+        </h2>
+        <form [formGroup]="guestForm" (ngSubmit)="onSubmit()" class="space-y-4 flex flex-col">
+            <label for="name" class="input input-bordered flex items-center gap-2">
+            <input id="name" type="text" formControlName="name" class="grow" placeholder="Enter name" />
+            </label>
+            <label class="mt-3 form-control w-full max-w-xs">
+              <select id="event" formControlName="event" class="select select-bordered">
+               <option disabled value="" selected>-- select the event --</option>
+               <option *ngFor="let event of events" [value]="event.id"> {{ event.label}}</option>
+               <option *ngIf="eventDefined">{{eventDefined}}</option>
+              </select>
+            </label>
+            <div *ngIf="guestForm.controls['event'].invalid && guestForm.controls['event'].touched"
+                        class="text-red-500 text-sm">
+                        event is required 
+                    </div>
+    
+    <button class="btn btn-circle self-center" (click)="createGuest()">add guest</button>
+            <div formArrayName="guests" >
+                <div class="flex flex-col" *ngFor="let guest of getGuests().controls; let i = index" [formGroupName]="i">
+                    <label for="name" class="input input-bordered flex items-center gap-2">
+                    <input id="name" type="text" formControlName="name" class="grow" placeholder="Enter name" /></label>
+                    <label for="surname" class="input input-bordered flex items-center gap-2">
+                    <input id="surname" type="text" formControlName="surname" class="grow"
+                       placeholder="Enter surname" /></label>
+                    <label for="noOfFriends" class="input input-bordered flex items-center gap-2">
+                    <input id="noOfFriend" type="number" formControlName="noOfFriends" class="grow"
+                            placeholder="Enter number of friend with you" /></label>
+                    <label for="tel" class="input input-bordered flex items-center gap-2">
+                    <input id="tel" type="tel" formControlName="phone" class="grow"
+                          placeholder="Enter telephone number" /></label>
+                    <div *ngIf="guest.get('phone')?.invalid && guest.get('phone')?.touched"
+                        class="text-red-500 text-sm">
+                        tel is required and should be in format +393515539529
+                    </div>
+                    <button class="btn btn-circle self-center" type="button" (click)="removeGuest(i)">Remove Guest</button>
+                </div>
+            </div>
+       
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="guestForm.invalid"
+        class="w-full p-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none">
+        crea lista
+    </button>
+    </form>
+    </div>
+    </div>

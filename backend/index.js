@@ -24,11 +24,9 @@ app.use('/api/users', userRoute)
 app.use('/api/companies', companyRoute)
 app.use('/api/locali', localeRoute)
 app.use('/api/events', eventRoute)
-/*
-
 app.use('/api/lists',listRoute)
 
-*/
+
 
 app.get("/", (req, res)=>{
     res.send("hello babe")

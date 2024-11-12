@@ -18,15 +18,16 @@
         <ul
           tabindex="0"
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-          <li><a>Homepage</a></li>
-          <li><a>Locali</a></li>
-          <li><a>Utenti</a></li>
-          <li><a>Eventi</a></li>
+          <li><a routerLink="/homepage">Homepage</a></li>
+          <li><a routerLink="/locals-list">Locali</a></li>
+          <li><a routerLink="/profile">Utenti</a></li>
+          <li><a routerLink="/events-list">Eventi</a></li>
+          <li><a routerLink="/guest-list">Lists</a></li>
         </ul>
       </div>
     </div>
     <div class="navbar-center">
-      <a class="btn btn-ghost text-xl">DiscoApp</a>
+      <a routerLink="/homepage" class="btn btn-ghost text-xl">DiscoApp</a>
     </div>
     <div class="navbar-end">
       <button (click)="logout()" class="btn btn-ghost">

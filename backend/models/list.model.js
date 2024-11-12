@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Step 1: Define the Guest Schema
+
 const guestSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  email: {
+  surname: {
     type: String,
     required: true,
   },
+ 
   phone: {
     type: String,
     required: false,
@@ -20,13 +21,12 @@ const guestSchema = new Schema({
     enum: ['invited', 'confirmed', 'declined', 'attended'],
     default: 'invited',
   },
-  additionalInfo: {
-    type: String,
+  numberOfFriends: {
+    type: Number,
     required: false,
   },
 }, { timestamps: true });
 
-// Step 2: Define the List Schema
 const listSchema = new Schema({
   name: {
     type: String,
@@ -34,7 +34,7 @@ const listSchema = new Schema({
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Assuming lists are associated with users
+    ref: 'User',
     required: true,
   },
   company: {

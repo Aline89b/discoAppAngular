@@ -187,7 +187,6 @@ return this.http.get('http://localhost:3000/api/locali').pipe(
         });
       } else if (this.dataType === 'Event') {
         console.log(formData)
-        console.log(typeof formData.date,typeof formData.time,typeof formData.price)
         this.createDataService.addEvent(formData).subscribe({
           next: (res: any) => {
             console.log('Success:', res);

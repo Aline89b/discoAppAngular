@@ -36,6 +36,10 @@ export class DataService {
     });
   }
 
+  getEventByCompany():Observable<event[]> {
+    return this.http.get<event[]> ( `${this.eventUrl}/byCompany `)
+  }
+
   fetchCompanies(): void {
     this.http.get<Company[]>(this.companyUrl).subscribe((companiesData) => {
       this.companiesSignal.set(companiesData);
@@ -43,8 +47,7 @@ export class DataService {
     });
   }
 
-  // Expose signals as getters for components to access
-  get places() {
+    get places() {
     return this.placesSignal
   }
 
@@ -54,5 +57,9 @@ export class DataService {
 
   get companies() {
     return this.companiesSignal
+  }
+
+  deleteElement(endpoint:string,id:string){
+    return this.http.delete(`${endpoint}/${id}`)
   }
 }
