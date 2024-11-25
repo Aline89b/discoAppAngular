@@ -3,12 +3,14 @@ const cors = require("cors")
 const helmet = require("helmet")
 const cookieParser = require("cookie-parser")
 const app = express()
+const path = require('path');
 
 const userRoute = require('./routes/userRoute')
 const eventRoute = require('./routes/eventRoute')
 const listRoute = require('./routes/listRoute')
 const localeRoute = require('./routes/localeRoute')
 const companyRoute = require('./routes/companyRoute')
+const qrcodeRoute = require('./routes/qrcodeRoute')
 
 
 const mongoose = require('mongoose')
@@ -19,12 +21,15 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use('/api/qrcodes', express.static(path.join(__dirname, 'qrcodes')));
 
 app.use('/api/users', userRoute)
 app.use('/api/companies', companyRoute)
 app.use('/api/locali', localeRoute)
 app.use('/api/events', eventRoute)
 app.use('/api/lists',listRoute)
+app.use('/api/qrcodes',qrcodeRoute)
+
 
 
 

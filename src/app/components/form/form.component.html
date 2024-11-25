@@ -8,13 +8,18 @@
 <div class="float-left">
       <label>Name</label>
       <input formControlName="name" class="input input-bordered w-full mb-4" />
-
+      <span *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-red-500 text-sm">
+        the nameof the company is required.
+      </span>
       <label>Regione Sociale</label>
       <input
         formControlName="regione_sociale"
         type="text"
         class="input input-bordered w-full mb-4"
       />
+      <span *ngIf="form.get('regione_sociale')?.invalid && form.get('regione_sociale')?.touched" class="text-red-500 text-sm">
+        regione sociale is required.
+      </span>
 
       <label>Partita IVA</label>
       <input
@@ -22,6 +27,9 @@
         type="text"
         class="input input-bordered w-full mb-4"
       />
+      <span *ngIf="form.get('PI')?.invalid && form.get('PI')?.touched" class="text-red-500 text-sm">
+        Please enter a valid VAT number.
+      </span>
 
       <label>Codice Univoco</label>
       <input
@@ -30,6 +38,9 @@
         class="input input-bordered w-full mb-4"
       />
     </div>
+    <span *ngIf="form.get('SDI')?.invalid && form.get('SDI')?.touched" class="text-red-500 text-sm">
+      Please enter a valid codice Univoco.
+    </span>
     <div class="float-right">
       <label>Email</label>
       <input
@@ -60,7 +71,9 @@
         class="input input-bordered w-full"
         autocomplete="off"
       />
-    
+      <span *ngIf="form.get('address')?.invalid && form.get('address')?.touched" class="text-red-500 text-sm">
+        Please enter a valid address.
+      </span>
       
         <ul 
           *ngIf="filteredOptions | async as options"

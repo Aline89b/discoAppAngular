@@ -157,7 +157,7 @@ const logIn = async (req, res) => {
       { expiresIn: "12h" }
     );
 
-    console.log("Generated Token:", email);
+    console.log("Generated Token:", token, req.headers);
 
     if (!user.verified) {
       return res
@@ -165,8 +165,7 @@ const logIn = async (req, res) => {
         .json({ message: "user not verified. Please check your email" });
     }
 
-    // Set the cookie and respond with success
-    res
+      res
       .cookie("Authorization", "Bearer " + token, {
         httpOnly: process.env.NODE_ENV === "production",
         secure: process.env.NODE_ENV === "production",

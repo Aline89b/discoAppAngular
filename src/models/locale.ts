@@ -1,6 +1,7 @@
 export interface locale {
+    _id:string,
     name: string;
-    address: string; // event ID or event name
+    address: string; 
     city: string;
     zipCode: string,
     capacity: number

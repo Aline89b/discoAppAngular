@@ -46,6 +46,7 @@ if(this.listName && this.eventDefined){
     value: event.name,
     id: event._id
   }));
+  console.log(this.events)
     },
     error: (err) => {
       console.error(err);
@@ -78,9 +79,9 @@ getGuests(){
     return new FormGroup({
       name:new FormControl('', Validators.required),
       surname:new FormControl('', Validators.required),
-      noOfFriends:new FormControl(0,Validators.required),
-      phone:new FormControl('',Validators.required)
-    })
+      noOfFriends:new FormControl(0,[Validators.required,Validators.pattern(/^\d+(\.\d+)?$/)]),
+      phone:new FormControl('',[Validators.required, Validators.pattern(/^\+39\d{9,10}$/)])
+       })
   }
 
   removeGuest(index: number): void {

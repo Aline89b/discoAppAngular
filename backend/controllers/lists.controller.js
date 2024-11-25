@@ -1,6 +1,7 @@
-const {List} = require('../models/list.model')
+const {List, Guest} = require('../models/list.model')
 const User = require('../models/users.model')
 const mongoose = require('mongoose');
+
 
 const getLists = async (req, res) =>{
     try {
@@ -94,5 +95,17 @@ addGuest = async(req,res) =>{
         res.status(500).json({message: error.message})
     }
 }
+const getListsById = async (req,res) =>{
 
-module.exports = { addList, getLists,deleteList, deleteGuest, addGuest }
+    const { createdBy } = req.params
+    try{
+   
+      const lists = await List.findById(createdBy)
+      res.status(200).json(lists)
+  }catch(error){
+      res.status(500).json({message:error.message})
+  }
+  
+  }
+
+module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById }

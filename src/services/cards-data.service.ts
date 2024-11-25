@@ -15,7 +15,7 @@ export class DataService {
   localeUrl = "http://localhost:3000/api/locali"
   listUrl = "http://localhost:3000/api/lists"
   guestUrl = "http://localhost:3000/api/guests"
-  // Define signals for each data type
+ 
   private placesSignal = signal<locale[]>([]);
   private eventsSignal = signal<event[]>([]);
   private companiesSignal = signal<Company[]>([]);
@@ -29,13 +29,32 @@ export class DataService {
     });
   }
 
+  fetchPlacesById(id:string): void {
+    this.http.get<locale[]>(`${this.localeUrl}/byUser/${id}`).subscribe((placeData) => {
+      this.placesSignal.set(placeData);
+      console.log(placeData)
+    });
+  }
+
+  getPlaceById(endpoint:string,id:string): Observable<locale> {
+    return this.http.get<locale>(`${endpoint}/${id}`)
+  }
+
   fetchEvents(): void {
     this.http.get<event[]>(this.eventUrl).subscribe((eventsData) => {
       this.eventsSignal.set(eventsData);
       console.log(eventsData)
     });
   }
-
+  fetchEventsById(id:string): void {
+    this.http.get<event[]>(`${this.eventUrl}/${id}`).subscribe((eventsData) => {
+      this.eventsSignal.set(eventsData);
+      console.log(eventsData)
+    });
+  }
+  getEventById(endpoint:string,id:string): Observable<event> {
+    return this.http.get<event> (`${endpoint}/${id}`)
+  }
   getEventByCompany():Observable<event[]> {
     return this.http.get<event[]> ( `${this.eventUrl}/byCompany `)
   }
@@ -47,10 +66,23 @@ export class DataService {
     });
   }
 
+  fetchCompaniesById(id:string): void {
+    this.http.get<Company[]>(`${this.companyUrl}/${id}`).subscribe((companiesData) => {
+      this.companiesSignal.set(companiesData);
+      console.log(companiesData)
+    });
+  }
+  getCompanyById(endpoint:string, id:string):void{
+    this.http.get<Company>(`${endpoint}/${id}`).subscribe((companyData) => {
+      this.companiesSignal.set([companyData]);
+      console.log(companyData)
+    });
+  }
+
     get places() {
     return this.placesSignal
   }
-
+  
   get events() {
     return this.eventsSignal
   }

@@ -3,7 +3,7 @@ export interface Guest {
     name: string;
     surname: string;
     email: string;
-    phone?: string;
+    phone: string;
     noOfFriends: number
     status: 'invited' | 'confirmed' | 'declined' | 'attended';
     

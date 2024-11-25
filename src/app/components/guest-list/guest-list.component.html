@@ -1,5 +1,5 @@
-<!--
-<div *ngIf="!lists.length">
+
+<div *ngIf="!lists().length">
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
   <div class="card bg-white p-6 rounded-lg shadow-md w-full max-w-md  flex flex-col gap-2 items-center">
     <div class="card-title">no lists in the page. </div>
@@ -7,106 +7,176 @@
   </div>
   </div>
 </div>
--->
+
 
 <div
   class="flex flex-col gap-2 items-center justify-center min-h-screen bg-gray-100"
 >
   <div
-    *ngFor="let list of lists()"
+    *ngFor="let list of lists(); let listIndex = index"
     class="bg-white p-6 rounded-lg shadow-md w-full max-w-fit flex-1 m-4 flex-wrap"
   >
-    <div class="flex flex-col gap-2 items-center">
-      <h2 class="card-title">{{ list.name }}</h2>
-      <h2 class="card-title">{{ list.event.name }}</h2>
+    <div class="flex flex-col gap-2 items-center ">
+      <h2 (click)="edit()" class="card-title">
+        <div *ngIf="!isEditing">{{ list.name }}</div>
+        <div *ngIf="isEditing">
+          <input
+            formControlName="formArray.at(lisIndex).get('name')"
+            (blur)="saveField(list._id, listIndex)"
+            (keydown.enter)="saveField(list._id, listIndex)"
+            type="text"
+          />
+        </div>
+      
+      </h2>
 
-      <div *ngFor="let guest of list.guests" class="flex">
-        <ul class="flex gap-2 content-center items-center flex-wrap">
-          <li class="text-xl font-bold">{{ guest.name }}</li>
-          <li class="align-middle text-xl font-bold">{{ guest.surname }}</li>
-          <li class="align-middle text-xl font-bold">
-            {{ guest.noOfFriends }}
-          </li>
-          <li class="align-middle text-xl font-bold">
-            <a href="tel:{{ guest.phone }}">{{ guest.phone }}</a>
-          </li>
-
-          <div class="card-actions justify-end">
-            <li>
-              <button
-                class="btn btn-circle"
-                (click)="deleteGuest(list._id, guest._id)"
-              >
-                <svg
-                  class="w-6 h-6 text-gray-800 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+      <h2 (click)="edit()" class="card-title">
+        <div *ngIf="!isEditing">{{ list.event.name }}</div>
+        <div *ngIf="isEditing">
+          <input
+            formControlName="formArray.at(lisIndex).get('event.name')"
+            (blur)="saveField(list._id, listIndex)"
+            (keydown.enter)="saveField(list._id, listIndex)"
+            type="text"
+          />
+        </div>
+      </h2>
+      <div class="flex flex-wrap">
+        <div class="table-fixed">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>No of Friend</th>
+                <th>Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let guest of list.guests;let guestIndex = index">
+                <td (click)="edit()">
+                  <div *ngIf="!isEditing">{{ guest.name }}</div>
+                <div *ngIf="isEditing">
+                  <input
+                    formControlName="formArray.at(guestIndex).get('name')"
+                    (blur)="saveField(list._id, guestIndex)"
+                    (keydown.enter)="saveField(list._id, guestIndex)"
+                    type="text"
                   />
-                </svg>
-              </button>
-            </li>
-            <li>
-              <button
-                class="btn btn-circle"
-                (click)="deleteGuest(list._id, guest._id)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  x="0px"
-                  y="0px"
-                  class="h-6 w-6"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
-                  ></path>
-                </svg>
-              </button>
-            </li>
-            <li>
-              <button
-                class="btn btn-circle"
-                (click)="addGuest(list.name, list.event.name, list._id)"
-              >
-                <svg
-                  class="w-6 h-6 text-gray-800 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 12h14m-7 7V5"
+                </div>
+                </td>
+                <td (click)="edit()">
+                  <div *ngIf="!isEditing">{{ guest.surname }}</div>
+                <div *ngIf="isEditing">
+                  <input
+                    formControlName="formArray.at(guestIndex).get('surname')"
+                    (blur)="saveField(list._id, guestIndex)"
+                    (keydown.enter)="saveField(list._id, guestIndex)"
+                    type="text"
                   />
-                </svg>
-              </button>
-            </li>
-          </div>
-        </ul>
+                </div>
+                </td>
+                <td (click)="edit()">
+                <div *ngIf="!isEditing">{{ guest.noOfFriends }}</div>
+                <div>
+                <input
+                  formControlName="formArray.at(guestIndex).get('noOfFriends')"
+                  (blur)="saveField(list._id, guestIndex)"
+                  (keydown.enter)="saveField(list._id, guestIndex)"
+                  type="number"
+                />
+              </div>
+                </td>
+                <td (click)="edit()">
+                  <div *ngIf="!isEditing">
+                  <a href="tel:{{ guest.phone }}">{{guest.phone}}</a>
+                </div>
+                <div *ngIf="isEditing">
+                  <input 
+                  formControlName="formArray.at(guestIndex).get('phone')"
+                  (blur)="saveField(list._id, guestIndex)"
+                  (keydown.enter)="saveField(list._id, guestIndex)" 
+                    type="text" 
+                    placeholder="Enter phone number" 
+                  />
+                </div>
+                <td>
+                  <button
+                    class="btn-ghost"
+                    (click)="sendCode(list._id, guest._id, guest.status, guest.phone)"
+                  >
+                    <svg
+                      class="w-6 h-6 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+                      />
+                    </svg>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn-ghost" (click)="deleteGuest(list._id, guest._id)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      class="h-6 w-6"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
+                      ></path>
+                    </svg>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="btn-ghost"
+                    (click)="addGuest(list.name, list.event.name, list._id)"
+                  >
+                    <svg
+                      class="w-6 h-6 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 12h14m-7 7V5"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="card-actions justify-end">
-        <a routerLink="/create-guest-list" class="btn btn-outline">add Lista</a>
-        <button class="btn btn-outline" (click)="deleteList(list._id)">
-          delete Lista
-        </button>
-      </div>
+    </div>
+    <div class="card-actions justify-end mt-2">
+      <a routerLink="/create-guest-list" class="btn btn-outline">Add List</a>
+      <button class="btn btn-outline" (click)="deleteList(list._id)">
+        Delete List
+      </button>
     </div>
   </div>
 </div>
+
+
+

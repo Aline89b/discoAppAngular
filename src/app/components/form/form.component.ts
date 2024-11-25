@@ -23,7 +23,7 @@ import { LocaleOption } from '../../../models/locale';
 
 export class FormComponent implements OnInit {
   @Input() dataType: 'Company' | 'User' | 'Locale' | 'Event'='Company';
-  @Input() initialData: any = {}; // Optional: Pre-fill form with initial data
+  @Input() initialData: any = {}; 
   form!: FormGroup;
 
   filteredOptions: Observable<any[]> | undefined  
@@ -31,12 +31,13 @@ export class FormComponent implements OnInit {
   
   filteredLocali: Observable<any[]> | undefined  
   locali: any[] =[]
+  
   constructor(private cookie: CookieService, public snackbar: SnackbarService, private http: HttpClient, private fb: FormBuilder, private createDataService: CreateCardsDataService) {}
 
   ngOnInit(): void {
     
     
-    // Define form fields dynamically based on dataType
+   
     if (this.dataType === 'User') {
       this.form = this.fb.group({
         name: [this.initialData.name || '', Validators.required],
@@ -76,13 +77,13 @@ export class FormComponent implements OnInit {
       this.form = this.fb.group({
         name: [this.initialData.name || '', Validators.required],
         regione_sociale: [this.initialData.locale || '', Validators.required],
-        PI: [this.initialData.date || '', Validators.required],
-        SDI: [this.initialData.time || '', Validators.required],
+        PI: [this.initialData.date || '', Validators.required, Validators.pattern('^IT\\d{11}$')],
+        SDI: [this.initialData.time || '', Validators.required,Validators.pattern('^[A-Za-z0-9]{7}$')],
         address: [this.initialData.address || '', Validators.required],
         city: [this.initialData.city || '', Validators.required],
         zipCode:[this.initialData.city || '', Validators.required],
         email: [this.initialData.email || '', Validators.email],
-        phone: [this.initialData.phone || '',[Validators.required, Validators.pattern(/^\+?[0-9\s\-]{7,15}$/)] ],
+        phone: [this.initialData.phone || '',[Validators.required, Validators.pattern(/^\+39\d{9}$/)] ],
       });
       
       
@@ -117,9 +118,9 @@ return this.http.get('http://localhost:3000/api/locali').pipe(
     });
     this.isVisible =!this.isVisible
   }
-  // Fetch address suggestions from the Nominatim API
+ 
   fetchAddressSuggestions(query: string): Observable<any[]> {
-    if (query.length < 3) return of([]); // Limit API calls for short queries
+    if (query.length < 3) return of([]); 
 
     const params = {
       q: query,
@@ -130,9 +131,11 @@ return this.http.get('http://localhost:3000/api/locali').pipe(
 
     return this.http.get<any[]>('https://nominatim.openstreetmap.org/search', { params }).pipe(
       map((results) => results.map(result => ({
-        display_name: result.display_name,
+        
+        display_name: result.display_name, 
         city: result.address.city || result.address.town || result.address.village || '',
         postcode: result.address.postcode || ''
+        
       })))
     );
   }

@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const authorizeRole = require('../middlewares/roleAuth')
+const {authorizeRole, authenticateUser }= require('../middlewares/roleAuth')
 const {getUsers, addUser, updatedUser, deleteUser, logIn, logOut, verifyUser, resetPWrequest, resetPW, inviteUser} = require('../controllers/users.controller')
 
-router.get('/',authorizeRole('admin'), getUsers)
+router.get('/',authenticateUser,authorizeRole('admin'), getUsers)
 router.post('/', addUser)
 router.patch('/:id', updatedUser)
 router.delete('/:id', deleteUser)

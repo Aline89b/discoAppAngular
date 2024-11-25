@@ -14,16 +14,21 @@ const guestSchema = new Schema({
  
   phone: {
     type: String,
-    required: false,
+    required: true,
   },
   status: {
     type: String,
     enum: ['invited', 'confirmed', 'declined', 'attended'],
     default: 'invited',
   },
-  numberOfFriends: {
+  qrcode:{
+    type: String,
+    required:false,
+    default: ''
+  },
+  noOfFriends: {
     type: Number,
-    required: false,
+    required: true,
   },
 }, { timestamps: true });
 

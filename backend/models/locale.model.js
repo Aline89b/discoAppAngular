@@ -3,13 +3,13 @@ const { timestamp } = require('rxjs')
 
 const localeSchema = mongoose.Schema({
 
-    name:{ type: String},
-    email:{type: String }, 
-    phone:{ type: String },
-    address:{ type: String },
+    name:{ type: String, required:true},
+    email:{type: String , required:false}, 
+    phone:{ type: String, required:false },
+    address:{ type: String, required:true },
     city:{ type: String },
     zipCode:{ type: String },
-    capacity:{type: Number},
+    capacity:{type: Number, required:true},
     eventId:{type: String},
     userId:{type: String},
     timestamp:{

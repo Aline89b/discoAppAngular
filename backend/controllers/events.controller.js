@@ -1,6 +1,8 @@
 const Event = require("../models/event.model")
 const jwt = require('jsonwebtoken');
-const User = require('../models/users.model')
+const User = require('../models/users.model');
+const { eventSchema } = require("../middlewares/validators");
+const mongoose = require('mongoose');
 
 const getEvents = async(req,res)=>{
     try {
@@ -48,29 +50,43 @@ const addEvent = async (req,res) =>{
     const {name, locale, date, time, price,userId } = eventData
 
     try {
+      const { error, value } = eventSchema.validate({ name, locale, date, time, price,createdBy:userId});
 
-        const user = await User.findById(userId);
+      if (error) {
+        return res
+          .status(401)
+          .json({ success: false, message: error.details[0].message });
+      }
+  
+      const ExistingEvent = await User.findOne({ name: name, locale:locale });
+      if (ExistingEvent) {
+        return res
+          .status(401)
+          .json({ success: false, message: "event already exists" });
+      }
+
+        const user = await User.findById({_id:new mongoose.Types.ObjectId(`${userId}`)});
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        // Extract the companyId from the user document
+       
         const { companyId } = user;
 
-        // Create the event with createdBy and companyId
+        
         const event = await Event.create({
             name,
             locale,
             date,
             time,
             price,
-            createdBy: userId,  // setting createdBy to userId
-            companyId           // setting companyId from user
+            createdBy: new mongoose.Types.ObjectId(`${userId}`),
+            companyId          
         });
 
         console.log('Event created:', event);
 
-        // Update the user with createdBy and companyId (optional, only if needed)
+    
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             { $set: { createdBy: userId, companyId: companyId } },
@@ -99,5 +115,28 @@ const deleteEvent = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+  
+const getEventsByLocale = async(req, res) =>{
+const {eventData} = req.body
+const { locale } = eventData
 
-module.exports = {addEvent, getEvents, getEventsByCompany, deleteEvent}
+  try {
+    const events = await Event.findOne({locale})
+    res.status(200).json({message:'events found', events})
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+}
+const getEventById = async(req, res) =>{
+const {id} = req.params  
+console.log(id)
+    try {
+      const event = await Event.findOne({_id: new mongoose.Types.ObjectId(`${id}`)})
+      console.log(event)
+      res.status(200).json(event)
+    } catch (error) {
+      res.status(500).json({message: error.message})
+    }
+  }
+
+module.exports = {addEvent, getEvents, getEventsByCompany, deleteEvent,getEventsByLocale,getEventById}
