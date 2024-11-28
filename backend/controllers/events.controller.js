@@ -139,4 +139,22 @@ console.log(id)
     }
   }
 
-module.exports = {addEvent, getEvents, getEventsByCompany, deleteEvent,getEventsByLocale,getEventById}
+  const editEvent = async(req, res) => {
+    const {id} = req.params
+    const{ eventData } =req.body
+    console.log(eventData)
+
+    try {
+      const EditedEvent = await Event.findByIdAndUpdate(
+        {_id: new mongoose.Types.ObjectId(`${id}`)},
+        eventData,
+        {new:true} 
+      )
+      console.log(EditedEvent)
+      res.status(200).json(EditedEvent)
+    } catch (error) {
+      res.status(500).json({message: error.message})
+    }
+  }
+
+module.exports = {addEvent, getEvents, getEventsByCompany, deleteEvent,getEventsByLocale,getEventById, editEvent}

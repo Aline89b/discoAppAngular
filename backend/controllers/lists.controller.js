@@ -61,9 +61,32 @@ deleteGuest = async(req, res) => {
       return res.status(404).json({ message: 'Guest not found in the list or already removed' });
     }
 
-    // Send a success response
+   
     res.status(200).json({ message: 'Guest removed successfully', result });
         
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
+getGuestById = async(req, res) =>{
+    const { guestId, listId} = req.params
+    console.log(guestId, listId)
+    try {
+                const list = await List.findById(listId);
+         if (!list) {
+             return res.status(404).json({ message: 'List not found' });
+         }
+ 
+    
+         const guest = list.guests.find((guest) => guest._id.toString() === guestId);
+ 
+         if (!guest) {
+             return res.status(404).json({ message: 'Guest not found' });
+         }
+ 
+       
+        res.status(200).json({message: ' guest found:', guest})
     } catch (error) {
         res.status(500).json({message: error.message})
     }
@@ -108,4 +131,4 @@ const getListsById = async (req,res) =>{
   
   }
 
-module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById }
+module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById, getGuestById }

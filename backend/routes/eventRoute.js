@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {addEvent, getEvents, getEventsByCompany, deleteEvent,getEventsByLocale,getEventById} = require('../controllers/events.controller')
+const {addEvent, getEvents, getEventsByCompany, deleteEvent,getEventsByLocale,getEventById,editEvent} = require('../controllers/events.controller')
 const {authorizeRole,authenticateUser} = require('../middlewares/roleAuth')
 
 
@@ -11,6 +11,7 @@ router.get('/byCompany', getEventsByCompany)
 router.delete('/:id',authenticateUser,authorizeRole('Admin','Manager'), deleteEvent)
 router.get('/byLocale', getEventsByLocale)
 router.get('/:id', getEventById)
+router.patch('/:id', editEvent)
 
 
 

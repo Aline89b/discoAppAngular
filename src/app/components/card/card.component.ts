@@ -14,6 +14,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
+import { EditService } from '../../../services/edit.service';
+import { RouterLink } from '@angular/router';
 
 
 
@@ -21,7 +23,7 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [CommonModule, FormComponent, ReactiveFormsModule,AutocompleteComponent],
+  imports: [CommonModule, FormComponent,RouterLink, ReactiveFormsModule,AutocompleteComponent],
   templateUrl: './card.component.html',
   styleUrl: './card.component.css'
 })
@@ -47,6 +49,7 @@ eventControl!:FormControl
 placeControl!: FormControl
 
 http = inject(HttpClient)
+editService = inject(EditService)
 
   constructor(private dataService: DataService) { 
    }
@@ -228,14 +231,54 @@ console.log(endpoint)
     this.eventForm.patchValue({ locale: locale.name });
   }
 
-  save(place:locale){
-    console.log(place)
+  save(){
+    if (!this.isEditingMode || !this.editedItemId()) {
+      console.error('No element is being edited.');
+      return;
+    }
+  
+    let endpoint = '';
+    let payload: any = {};
+    const id = this.editedItemId();
+  
+    if (this.dataType === 'locale') {
+
+      payload = this.placeForm.value; 
+      
+      this.editService.editPlace(id!,payload).subscribe({
+        next: (response) => {
+          console.log('Update successful:', response);
+          this.isEditingMode = false;
+          this.editedItemId.set(null);
+          this.loadData(); 
+        },
+        error: (err) => {
+          console.error('Error updating element:', err);
+        },
+      });
+    } else if (this.dataType === 'event') {
+       payload = this.eventForm.value; 
+       console.log(payload)
+      this.editService.editEvent(id!,payload).subscribe({
+        next: (response) => {
+          console.log('Update successful:', response);
+          this.isEditingMode = false;
+          this.editedItemId.set(null);
+          this.loadData(); 
+        },
+        error: (err) => {
+          console.error('Error updating element:', err);
+        },
+      });
+    } else if (this.dataType === 'Company') {
+      endpoint = `http://localhost:3000/api/companies/${id}`;
+      console.log(payload)
+    }
+  
+    
   }
 
-  saveEvent(event:event){
-    console.log(event)
-  }
-  
+
   cancel(){
     this.isEditingMode = false
     this.editedItemId.set(null) 

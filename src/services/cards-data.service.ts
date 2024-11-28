@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { locale } from '../models/locale';
 import  {event} from '../models/event'
 import { Company } from '../models/company'
+import { Guest } from '../models/guest';
 @Injectable({
   providedIn: 'root'
 })
@@ -77,8 +78,12 @@ export class DataService {
       this.companiesSignal.set([companyData]);
       console.log(companyData)
     });
+    
   }
-
+  
+  getGuestById(listId:String, guestId:string): Observable<Guest> {
+    return this.http.get<Guest> (`${this.listUrl}/${listId}/${guestId}`)
+  }
     get places() {
     return this.placesSignal
   }

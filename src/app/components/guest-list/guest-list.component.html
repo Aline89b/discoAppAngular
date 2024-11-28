@@ -10,41 +10,34 @@
 
 
 <div
-  class="flex flex-col gap-2 items-center justify-center min-h-screen bg-gray-100"
+  class="flex flex-col gap-2 items-center justify-center  bg-gray-100"
 >
   <div
-    *ngFor="let list of lists(); let listIndex = index"
+  [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== list._id }"
+    *ngFor="let list of lists(); let index = index; trackBy: trackByList"
     class="bg-white p-6 rounded-lg shadow-md w-full max-w-fit flex-1 m-4 flex-wrap"
+    
   >
     <div class="flex flex-col gap-2 items-center ">
-      <h2 (click)="edit()" class="card-title">
-        <div *ngIf="!isEditing">{{ list.name }}</div>
-        <div *ngIf="isEditing">
+      <h2 class="card-title">
+        <div *ngIf="!isEditing && editedItemId() !== list._id">{{ list.name }}</div>
+        <div   *ngIf="isEditing && editedItemId() === list._id">
           <input
-            formControlName="formArray.at(lisIndex).get('name')"
-            (blur)="saveField(list._id, listIndex)"
-            (keydown.enter)="saveField(list._id, listIndex)"
+          [formControl]="getFormControl(getFormGroupAt(index), 'name')"
+            (blur)="save()"
+            
             type="text"
           />
         </div>
       
       </h2>
 
-      <h2 (click)="edit()" class="card-title">
-        <div *ngIf="!isEditing">{{ list.event.name }}</div>
-        <div *ngIf="isEditing">
-          <input
-            formControlName="formArray.at(lisIndex).get('event.name')"
-            (blur)="saveField(list._id, listIndex)"
-            (keydown.enter)="saveField(list._id, listIndex)"
-            type="text"
-          />
-        </div>
-      </h2>
+     
       <div class="flex flex-wrap">
-        <div class="table-fixed">
-          <table>
-            <thead>
+        <div class="overflow-x-auto" >
+         
+          <table class="table-fixed max-w-md max-h-fit">
+             <thead>
               <tr>
                 <th>Name</th>
                 <th>Surname</th>
@@ -53,54 +46,54 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let guest of list.guests;let guestIndex = index">
-                <td (click)="edit()">
-                  <div *ngIf="!isEditing">{{ guest.name }}</div>
-                <div *ngIf="isEditing">
+              <tr *ngFor="let guest of list.guests; let guestIndex = index; trackBy: trackByGuest">
+                <td class="block md:table-cell text-center" >
+                  <div *ngIf="!isEditing || editedItemId() !== list._id">{{ guest.name }}</div>
+                <div  *ngIf="isEditing && editedItemId() === list._id">
                   <input
-                    formControlName="formArray.at(guestIndex).get('name')"
-                    (blur)="saveField(list._id, guestIndex)"
-                    (keydown.enter)="saveField(list._id, guestIndex)"
+                  [formControl]="getGuestControl(index, guestIndex, 'name')"
+                    (blur)="save()"
                     type="text"
+                    class="w-full"
                   />
                 </div>
                 </td>
-                <td (click)="edit()">
-                  <div *ngIf="!isEditing">{{ guest.surname }}</div>
-                <div *ngIf="isEditing">
+                <td class=" text-center">
+                  <div  *ngIf="!isEditing && editedItemId() !== list._id">{{ guest.surname }}</div>
+                <div  *ngIf="isEditing && editedItemId() === list._id">
                   <input
-                    formControlName="formArray.at(guestIndex).get('surname')"
-                    (blur)="saveField(list._id, guestIndex)"
-                    (keydown.enter)="saveField(list._id, guestIndex)"
+                  [formControl]="getGuestControl(index, guestIndex, 'surname')"
+                    (blur)="save()"
                     type="text"
+                    class="w-full"
                   />
                 </div>
                 </td>
-                <td (click)="edit()">
-                <div *ngIf="!isEditing">{{ guest.noOfFriends }}</div>
-                <div>
+                <td class=" text-center" >
+                <div *ngIf="!isEditing && editedItemId() !== list._id">{{ guest.noOfFriends }}</div>
+                <div *ngIf="isEditing && editedItemId() === list._id">
                 <input
-                  formControlName="formArray.at(guestIndex).get('noOfFriends')"
-                  (blur)="saveField(list._id, guestIndex)"
-                  (keydown.enter)="saveField(list._id, guestIndex)"
+                [formControl]="getGuestControl(index, guestIndex, 'noOfFriends')"
+                  (blur)="save()"
                   type="number"
+                  class="w-full"
                 />
               </div>
                 </td>
-                <td (click)="edit()">
-                  <div *ngIf="!isEditing">
-                  <a href="tel:{{ guest.phone }}">{{guest.phone}}</a>
+                <td class="text-center">
+                  <div *ngIf="!isEditing && editedItemId() !== list._id ">
+                    <a href="tel:{{ guest.phone }}">{{guest.phone}}</a>
                 </div>
-                <div *ngIf="isEditing">
+                <div *ngIf="isEditing && editedItemId() === list._id">
                   <input 
-                  formControlName="formArray.at(guestIndex).get('phone')"
-                  (blur)="saveField(list._id, guestIndex)"
-                  (keydown.enter)="saveField(list._id, guestIndex)" 
-                    type="text" 
+                  [formControl]="getGuestControl(index, guestIndex, 'phone')"
+                  (blur)="save()"
+                  class="w-full"
+                    type="tel" 
                     placeholder="Enter phone number" 
                   />
                 </div>
-                <td>
+                <td >
                   <button
                     class="btn-ghost"
                     (click)="sendCode(list._id, guest._id, guest.status, guest.phone)"
@@ -124,7 +117,7 @@
                     </svg>
                   </button>
                 </td>
-                <td>
+                <td >
                   <button class="btn-ghost" (click)="deleteGuest(list._id, guest._id)">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +132,7 @@
                     </svg>
                   </button>
                 </td>
-                <td>
+                <td >
                   <button
                     class="btn-ghost"
                     (click)="addGuest(list.name, list.event.name, list._id)"
@@ -169,11 +162,24 @@
         </div>
       </div>
     </div>
-    <div class="card-actions justify-end mt-2">
-      <a routerLink="/create-guest-list" class="btn btn-outline">Add List</a>
+    <div *ngIf="!isEditing" class="card-actions justify-end mt-2">
+      <a  routerLink="/create-guest-list" class="btn btn-outline">Add List</a>
       <button class="btn btn-outline" (click)="deleteList(list._id)">
         Delete List
       </button>
+      <button class="btn btn-outline" (click)="edit(list._id)">
+        Edit List
+      </button>
+
+    </div>
+    <div  class="card-actions justify-end mt-2">
+      <button *ngIf="isEditing && editedItemId() === list._id" class="btn btn-outline" (click)="save()">
+       Save 
+      </button>
+      <button *ngIf="isEditing && editedItemId() === list._id " class="btn btn-outline" (click)="cancel()">
+       cancel
+      </button>
+
     </div>
   </div>
 </div>

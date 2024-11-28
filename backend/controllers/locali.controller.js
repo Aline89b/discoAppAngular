@@ -83,4 +83,22 @@ const getPlaceById = async(req,res) => {
 
 }
 
-module.exports= {createLocale,getLocali, deleteLocale, getLocaleListById, getPlaceById}
+const editPlace = async(req, res) => {
+  const {id} = req.params
+  const{ localeData } =req.body
+  console.log(localeData)
+
+  try {
+    const EditedPlace = await Event.findByIdAndUpdate(
+      {_id: new mongoose.Types.ObjectId(`${id}`)},
+      localeData,
+      {new:true} 
+    )
+    console.log(EditedPlace)
+    res.status(200).json(EditedPlace)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+}
+
+module.exports= {createLocale,getLocali, deleteLocale, getLocaleListById, getPlaceById, editPlace}

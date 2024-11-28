@@ -6,12 +6,13 @@ import { SnackbarService } from '../../../services/snackbar.service';
 import { Router, RouterLink } from '@angular/router';
 import { CreateCardsDataService } from '../../../services/create-cards-data.service';
 import { Guest } from '../../../models/guest';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EditService } from '../../../services/edit.service';
 
 @Component({
   selector: 'app-guest-list',
   standalone: true,
-  imports: [ CommonModule, RouterLink],
+  imports: [ CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './guest-list.component.html',
   styleUrl: './guest-list.component.css'
 })
@@ -28,10 +29,14 @@ export class GuestListComponent implements OnInit {
   private fb = inject(FormBuilder);
   formArray: FormArray = this.fb.array([]);
   guestForm!: FormGroup
+  editedItemId = signal<string | null>(null);
+
+  editService =inject(EditService)
   constructor() { }
-ngOnInit(): void {
- 
-this.getLists()
+
+  ngOnInit(): void {
+  
+  this.getLists()
 
 
 }
@@ -41,7 +46,7 @@ getLists(){
       console.log(res)
       this.lists.set(res); 
       this.initFormArray(res);
-      console.log(typeof(res))
+      
     },
     error: (err) => {
       console.error('Error fetching lists:', err);
@@ -49,19 +54,39 @@ getLists(){
     }
   });
 }
+getFormGroupAt(index: number): FormGroup {
+  return this.formArray.at(index) as FormGroup;
+}
+getFormControl(group: FormGroup, controlName: string): FormControl {
+  return group.get(controlName) as FormControl;
+}
+
+getGuestsFormArray(index: number): FormArray {
+  return this.getFormGroupAt(index).get('guests') as FormArray;
+}
+getGuestControl(listIndex: number, guestIndex: number, controlName: string): FormControl {
+  return this.getGuestsFormArray(listIndex).at(guestIndex).get(controlName) as FormControl;
+}
 
 initFormArray(lists: GuestList[]): void {
-lists.forEach((list)=>{
-  this.guestForm = new FormGroup({
-    name: new FormControl(list.name, Validators.required),
-    event: new FormControl(list.event, Validators.required),
-    guests: new FormArray([])
-    
-  })
-  this.formArray.push(this.guestForm);
-})
-  
-  
+  lists.forEach((list) => {
+    const guestsFormArray = new FormArray(
+      list.guests.map((guest) => this.createNewGroup(guest))
+    );
+
+    const listFormGroup = new FormGroup({
+      name: new FormControl(list.name, Validators.required),
+      event: new FormControl(list.event, Validators.required),
+      guests: guestsFormArray,
+    });
+
+    this.formArray.push(listFormGroup);
+  });
+}
+
+cancel(){
+ this.isEditing= false
+ this.editedItemId.set(null);
 }
 
 getGuests(){
@@ -127,21 +152,46 @@ deleteList(id:string){
     }
   })
 }
+trackByList(index: number, item: GuestList):string {
+  
+  return item._id; 
+}
+trackByGuest(index: number, item: Guest):string {
 
-edit() {
+  return item._id; 
+}
+edit(id:string) {
   this.isEditing = true;
+  this.editedItemId.set(id);
+   
+  console.log(id)
 }
-saveField(listId: string, guestIndex: number): void {
-  const guestForm = this.formArray.at(guestIndex) as FormGroup;
-  const updatedGuestData = guestForm.value;
-  console.log(updatedGuestData)
-/*
-  this.http.put(`http://localhost:3000/api/lists/${listId}/guests/${guestIndex}`, updatedGuestData).subscribe({
-    next: () => this.snackbar.show('Guest updated successfully', 'success'),
-    error: (err) => this.snackbar.show(err.error.message, 'error'),
-  });
-  */
-}
+save(){
+  if (!this.isEditing  || !this.editedItemId()) {
+    console.error('No element is being edited.');
+    return;
+  }
 
+  
+  let payload: any = {};
+  const id = this.editedItemId();
+   console.log(id)
+   /* payload = this.listForm.value; 
+    
+    this.editService.editList(id!,payload).subscribe({
+      next: (response) => {
+        console.log('Update successful:', response);
+        this.isEditing = false;
+        this.editedItemId.set(null);
+        this.getLists(); 
+      },
+      error: (err) => {
+        console.error('Error updating element:', err);
+      },
+    });
+  }
+    
+*/
+}
 }
 

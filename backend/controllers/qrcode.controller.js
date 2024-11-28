@@ -23,7 +23,10 @@ const sendQRcode = async (req,res) => {
         
         const filePath = path.join(__dirname, '..', 'qrcodes', `${guestId}.png`)
     
-         await QRcode.toFile(filePath, qrData);
+         await QRcode.toFile(filePath, qrData,{
+            errorCorrectionLevel: 'H',
+            width: 500,
+        });
          
         const qrcodeUrl  = `${process.env.NGROK_URL}/api/qrcodes/${listId}/${guestId}.png`;
       

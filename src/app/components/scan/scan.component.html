@@ -1,46 +1,15 @@
-<div class="scanner-shell" [hidden]="!hasDevices">
+<div
+  class="flex h-screen items-center justify-center overflow-auto max-w-screen flex-wrap bg-gray-100 p-4"
+>
+<zxing-scanner [enable]="scannerEnabled" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
 
-	<zxing-scanner #scanner start="true" [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)" [formats]="allowedFormats"></zxing-scanner>
-
-	<section class="results" *ngIf="qrResultString">
-		<small>Result</small>
-		<strong>{{ qrResultString }}</strong>
-	</section>
-
+<div class="card bg-base-100 w-1/2 shadow-xl" [ngClass]="qrResultParsed.status === 'invited' ? 'bg-green-600' : 'bg-red-600'" *ngIf="!scannerEnabled">
+  <div class="card-body">
+    <small>Result</small>
+    <strong>{{ qrResultParsed.status }}</strong>
+	<div class="card-actions justify-end">
+  <button class="btn btn-outline" routerLink="/guest-list" >GO TO THE LIST</button>
+  </div>
 </div>
 
-<ng-container *ngIf="hasPermission === undefined">
-
-	<h2>Waiting for permissions.</h2>
-
-	<blockquote>
-		If your device does not has cameras, no permissions will be asked.
-	</blockquote>
-
-</ng-container>
-
-<ng-container *ngIf="hasPermission === false">
-
-	<h2>You denied the camera permission, we can't scan anything without it. 😪</h2>
-
-</ng-container>
-
-<ng-container *ngIf="hasDevices === undefined">
-
-	<h2>Couldn't check for devices.</h2>
-
-	<blockquote>
-		This may be caused by some security error.
-	</blockquote>
-
-</ng-container>
-
-<ng-container *ngIf="hasDevices === false">
-
-	<h2>No devices were found.</h2>
-
-	<blockquote>
-		I believe your device has no media devices attached to.
-	</blockquote>
-
-</ng-container>
+</div>

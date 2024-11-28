@@ -147,7 +147,7 @@
           </button>
           <button
             *ngIf="isEditingMode && editedItemId() === place._id"
-            (click)="save(place)"
+            (click)="save()"
             class="btn btn-info"
           >
             save
@@ -155,6 +155,7 @@
           <button
             *ngIf="!isEditingMode && editedItemId() !== place._id"
             class="btn btn-info"
+            (click)="save()"
           >
             EVENTS
           </button>
@@ -188,7 +189,7 @@
           <div class="flex">
             <label>⏰ Time:</label>
             <input
-              type="string"
+              type="time"
               formControlName="time"
               class="input input-ghost w-full mb-4"
             />
@@ -207,7 +208,7 @@
           <div class="flex">
             <label>📅 Date: </label>
             <input
-              type="text"
+              type="date"
               formControlName="date"
               class="input input-ghost w-full mb-4"
             />
@@ -223,7 +224,7 @@
 
           <div class="card-actions justify-end">
             <button (click)="cancel()" class="btn btn-info">cancel</button>
-            <button (click)="saveEvent(event)" class="btn btn-info">
+            <button (click)="save()" class="btn btn-info">
               save
             </button>
           </div>
@@ -284,7 +285,7 @@
       <p>📅 Date: {{ event.date | date }}</p>
       <p>💲 Price: {{ event.price | currency }}</p>
       <div class="card-actions justify-end">
-        <button routerLink="/create-guest-list" class="btn btn-info">
+        <button routerLink="/guest-list" class="btn btn-info">
           manda invito
         </button>
       </div>
