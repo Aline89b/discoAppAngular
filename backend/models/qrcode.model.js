@@ -20,6 +20,7 @@ const qrcodeSchema = new mongoose.Schema({
         enum: ['invited', 'accepted'],
         default: 'invited',
     },
+    scanned: { type: Boolean, default: false },
     expiresAt: {
         type: Date,
         required: true,  

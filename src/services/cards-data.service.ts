@@ -5,28 +5,36 @@ import { locale } from '../models/locale';
 import  {event} from '../models/event'
 import { Company } from '../models/company'
 import { Guest } from '../models/guest';
+import { baseUrl } from '../url';
+import { User } from '../models/user';
 @Injectable({
   providedIn: 'root'
 })
 
 
 export class DataService {
-  companyUrl = "http://localhost:3000/api/companies"
-  eventUrl = "http://localhost:3000/api/events"
-  localeUrl = "http://localhost:3000/api/locali"
-  listUrl = "http://localhost:3000/api/lists"
-  guestUrl = "http://localhost:3000/api/guests"
- 
+  companyUrl = `${baseUrl}/api/companies`
+  eventUrl = `${baseUrl}/api/events`
+  localeUrl = `${baseUrl}/api/locali`
+  listUrl = `${baseUrl}/api/lists`
+  guestUrl = `${baseUrl}/api/guests`
+  userUrl = `${baseUrl}/api/users`
   private placesSignal = signal<locale[]>([]);
   private eventsSignal = signal<event[]>([]);
   private companiesSignal = signal<Company[]>([]);
-
+private usersSignal = signal<User[]>([])
   constructor(private http: HttpClient) {}
 
   fetchPlaces(): void {
     this.http.get<locale[]>(this.localeUrl).subscribe((placeData) => {
       this.placesSignal.set(placeData);
       console.log(placeData)
+    });
+  }
+  fetchUsers(): void {
+    this.http.get<User[]>(this.userUrl).subscribe((User) => {
+      this.usersSignal.set(User);
+      console.log(User)
     });
   }
 
@@ -80,6 +88,12 @@ export class DataService {
     });
     
   }
+  fetchUserById( id:string):void{
+    this.http.get<User>(`${this.userUrl}/${id}`).subscribe((User) => {
+      this.usersSignal.set([User]);
+      console.log(User)
+    })
+  }
   
   getGuestById(listId:String, guestId:string): Observable<Guest> {
     return this.http.get<Guest> (`${this.listUrl}/${listId}/${guestId}`)
@@ -95,7 +109,9 @@ export class DataService {
   get companies() {
     return this.companiesSignal
   }
-
+  get users() {
+    return this.usersSignal
+  }
   deleteElement(endpoint:string,id:string){
     return this.http.delete(`${endpoint}/${id}`)
   }

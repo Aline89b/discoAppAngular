@@ -11,6 +11,7 @@ const listRoute = require('./routes/listRoute')
 const localeRoute = require('./routes/localeRoute')
 const companyRoute = require('./routes/companyRoute')
 const qrcodeRoute = require('./routes/qrcodeRoute')
+const searchRoute = require('./routes/searchRoute')
 
 
 const mongoose = require('mongoose')
@@ -29,6 +30,7 @@ app.use('/api/locali', localeRoute)
 app.use('/api/events', eventRoute)
 app.use('/api/lists',listRoute)
 app.use('/api/qrcodes',qrcodeRoute)
+app.use('/api/search',searchRoute)
 
 
 

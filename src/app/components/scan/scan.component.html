@@ -5,10 +5,12 @@
 
 <div class="card bg-base-100 w-1/2 shadow-xl" [ngClass]="qrResultParsed.status === 'invited' ? 'bg-green-600' : 'bg-red-600'" *ngIf="!scannerEnabled">
   <div class="card-body">
-    <small>Result</small>
-    <strong>{{ qrResultParsed.status }}</strong>
+   
+    <strong>{{ guest.name }} {{ guest.surname }}</strong>
+	<strong>{{ qrResultParsed.status }}</strong>
+
 	<div class="card-actions justify-end">
-  <button class="btn btn-outline" routerLink="/guest-list" >GO TO THE LIST</button>
+  <button (click)="goToTheList(this.qrResultParsed.listId,this.qrResultParsed.guestId)" class="btn btn-outline"  >GO TO THE LIST</button>
   </div>
 </div>
 

@@ -1,4 +1,5 @@
-const {List, Guest} = require('../models/list.model')
+const {List, Guest} = require('../models/list.model');
+const qrcode = require('../models/qrcode.model');
 const User = require('../models/users.model')
 const mongoose = require('mongoose');
 
@@ -78,7 +79,7 @@ getGuestById = async(req, res) =>{
              return res.status(404).json({ message: 'List not found' });
          }
  
-    
+        
          const guest = list.guests.find((guest) => guest._id.toString() === guestId);
  
          if (!guest) {
@@ -86,11 +87,49 @@ getGuestById = async(req, res) =>{
          }
  
        
-        res.status(200).json({message: ' guest found:', guest})
+        res.status(200).json(guest)
     } catch (error) {
         res.status(500).json({message: error.message})
     }
 }
+changeStatusGuest = async(req, res) =>{
+    const { guestId, listId} = req.params
+    console.log(guestId, listId)
+    try {
+                const list = await List.findById(listId);
+         if (!list) {
+             return res.status(404).json({ message: 'List not found' });
+         }
+
+         checkQRcode = await qrcode.findOne({ guestId, listId });
+
+         if (!checkQRcode) {
+             return res.status(404).json({ message: 'QR code not found.' });
+         }
+         if (checkQRcode.scanned) {
+            return res.status(400).json({ message: 'QR code already scanned.' });
+        }
+        qrcode.scanned = true;
+        await qrcode.save();
+                
+         const updatedList = await List.findOneAndUpdate(
+            { _id: listId, 'guests._id': guestId }, 
+            { $set: { 'guests.$.status': 'attended' , 'guests.$.qrcode': 'scanned' } }, 
+            { new: true } 
+        );
+ 
+         if (!updatedList) {
+             return res.status(404).json({ message: 'Guest not found' });
+         }
+
+          
+       
+        res.status(200).json({message: ' guest updated',updatedList})
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
 
 addGuest = async(req,res) =>{
 
@@ -131,4 +170,4 @@ const getListsById = async (req,res) =>{
   
   }
 
-module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById, getGuestById }
+module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById, getGuestById,changeStatusGuest }

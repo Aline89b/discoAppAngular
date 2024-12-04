@@ -16,6 +16,8 @@ import { HttpClient } from '@angular/common/http';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 import { EditService } from '../../../services/edit.service';
 import { RouterLink } from '@angular/router';
+import { baseUrl } from '../../../url';
+import { User } from '../../../models/user';
 
 
 
@@ -36,6 +38,8 @@ export class CardComponent implements OnInit {
   places = this.dataService.places
   events = this.dataService.events;
   companies = this.dataService.companies
+  users = this.dataService.users
+
   cookie =inject(CookieService)
   role = ''
   userId = ''
@@ -107,8 +111,12 @@ loadData(){
   }else if(this.dataType === 'event'){
 
     this.dataService.fetchEvents();
-  }
+  }else if(this.dataType === 'User'){
+
+    this.dataService.fetchUsers();
 }
+}
+
 loadDataById(id:string){
   if (this.dataType === 'locale'){
   
@@ -120,17 +128,20 @@ loadDataById(id:string){
   }else if(this.dataType === 'event'){
 
     this.dataService.fetchEventsById(id);
+  }else if(this.dataType === 'User'){
+
+    this.dataService.fetchUserById(id);
   }
 }
 
 deleteElement(id:string){
   let endpoint = '';
     if (this.dataType === 'locale') {
-      endpoint = 'http://localhost:3000/api/locali';
+      endpoint = `${baseUrl}/api/locali`;
     } else if (this.dataType === 'Company') {
-      endpoint = 'http://localhost:3000/api/companies';
+      endpoint = `${baseUrl}/api/companies`;
     } else if (this.dataType === 'event') {
-      endpoint = 'http://localhost:3000/api/events';
+      endpoint = `${baseUrl}/api/events`;
     }
 console.log(endpoint)
     this.dataService.deleteElement(endpoint, id).subscribe({
@@ -150,12 +161,16 @@ console.log(endpoint)
     console.log(item._id, index)
     return item._id; 
   }
+  trackByUser(index: number, item: User):string {
+    console.log(item._id, index)
+    return item._id; 
+  }
 
   editElement(id:string){
     this.isEditingMode = true
     let endpoint = '';
     if (this.dataType === 'locale') {
-      endpoint = 'http://localhost:3000/api/locali';
+      endpoint = `${baseUrl}/api/locali`;
      this.dataService.getPlaceById(endpoint, id).subscribe(place => {
       console.log(place.name);
       
@@ -171,13 +186,13 @@ console.log(endpoint)
     })
   
        } else if (this.dataType === 'Company') {
-      endpoint = 'http://localhost:3000/api/companies';
+      endpoint = `${baseUrl}/api/companies`;
       this.dataService.getCompanyById(endpoint, id);
          this.editedItemId.set(id);
     } else if (this.dataType === 'event') {
       this.editedItemId.set(id);
       console.log(id)
-      endpoint = 'http://localhost:3000/api/events';
+      endpoint = `${baseUrl}/api/events`;
        this.dataService.getEventById(endpoint,id).subscribe(event => {
         console.log(event.name);
         
@@ -195,7 +210,7 @@ console.log(endpoint)
   
   fetchLocale = (value: string) => {
     console.log('Inside fetchSuggestions:', value);
-    return this.http.get<LocaleOption[]>('http://localhost:3000/api/locali').pipe(
+    return this.http.get<LocaleOption[]>(`${baseUrl}/api/locali`).pipe(
       map((locali: any[]) =>
         locali.map((locale: LocaleOption) => ({
           name: locale.name,

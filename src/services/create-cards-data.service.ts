@@ -6,17 +6,18 @@ import { GuestList } from '../models/lista';
 import { Company } from '../models/company';
 import { event } from '../models/event';
 import { locale } from '../models/locale';
+import { baseUrl } from '../url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreateCardsDataService {
-companyUrl = "http://localhost:3000/api/companies"
-eventUrl = "http://localhost:3000/api/events"
-localeUrl = "http://localhost:3000/api/locali"
-listUrl = "http://localhost:3000/api/lists"
-guestUrl = "http://localhost:3000/api/lists"
-qrcodeUrl = "http://localhost:3000/api/qrcodes"
+companyUrl = `${baseUrl}/api/companies`
+eventUrl = `${baseUrl}/api/events`
+localeUrl = `${baseUrl}/api/locali`
+listUrl = `${baseUrl}/api/lists`
+guestUrl = `${baseUrl}/api/lists`
+qrcodeUrl = `${baseUrl}/api/qrcodes`
 
 
 

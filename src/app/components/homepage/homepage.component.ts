@@ -19,7 +19,7 @@ CookieService = inject(CookieService)
 ngOnInit(): void {
   const token = this.CookieService.get('token')
   const email = this.CookieService.get('email')
-  console.log(token, email)
+
  
 }
 

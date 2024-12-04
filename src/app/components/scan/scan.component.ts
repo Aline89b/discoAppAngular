@@ -4,7 +4,8 @@ import { BarcodeFormat, Result } from '@zxing/library';
 import { CommonModule } from '@angular/common';
 import { qrResult } from '../../../models/qrResulr';
 import { DataService } from '../../../services/cards-data.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Guest} from '../../../models/guest';
 @Component({
   selector: 'app-scan',
   standalone: true,
@@ -20,6 +21,19 @@ export class ScanComponent  {
     guestId: '',
     status: ''
   }
+  listName:string =''
+  guest: Guest = {
+    _id: '',
+    name: '',
+    surname: '',
+    email: '',
+    phone: '',
+    noOfFriends: 0,
+    status: 'invited'
+  }
+
+  router = inject(Router)
+
   allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX]
   @ViewChild('scanner')
   scanner:  ZXingScannerComponent | undefined;
@@ -39,14 +53,22 @@ this.dataService.getGuestById(this.qrResultParsed.listId,this.qrResultParsed.gue
   next: (res) => {
     console.log(res)
     
+    this.guest = res
   } ,
   error: (err) =>{
     console.error('Error catching guest:', err)
   }
 })
     this.scannerEnabled = false
+    
+    
   }
-
+  goToTheList(listId: string, guestId: string) {
+    console.log(listId,guestId)
+    this.router.navigate(['/guest-list'], {
+      state: { listId, guestId }
+    });
+  }
 
   
 

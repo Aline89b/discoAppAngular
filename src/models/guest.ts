@@ -8,5 +8,6 @@ export interface Guest {
     status: 'invited' | 'confirmed' | 'declined' | 'attended';
     
   }
+
   
   

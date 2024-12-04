@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { AuthFormComponent } from './components/auth-form/auth-form.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -19,6 +19,17 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   
   title = 'discoAppAngular';
+  constructor(private router: Router) {}
+
+  shouldShowNav(): boolean {
+    // Define the routes where the nav should be hidden
+    
+     if(this.router.url.includes('/login') || this.router.url.includes('/signup') ){
+      return false
+    }else{
+      return true
+    }
+  }
 
    
   

@@ -52,7 +52,7 @@ const sendQRcode = async (req,res) => {
         const qrcodeNew = new qrcode({
             guestId,
             listId,
-            qrCodePath: filePath,  // Local path, adjust if saving in cloud storage
+            qrCodePath: filePath, 
             status,
             expiresAt: expirationDate,  
         });
@@ -70,15 +70,15 @@ const getQRcode = async(req, res) =>{
     const { listId, guestId } = req.params;
     const filePath = path.join(__dirname, '..', 'qrcodes', `${guestId}.png`);
     
-    // Ensure the file exists and send it back to the client
+   
     try {
-        // Check if the file exists using fs.promises.access()
+       
         await fs.promises.access(filePath, fs.constants.F_OK);
 
-        // If the file exists, send it
+      
         res.sendFile(filePath);
     } catch (error) {
-        // If the file doesn't exist, return 404
+       
         res.status(404).send('QR code not found');
     }
 }

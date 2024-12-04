@@ -14,23 +14,18 @@ import { locale } from '../../../models/locale';
 })
 export class AutocompleteComponent implements OnInit {
   @Input() control!: FormControl
-  @Input() fetchSuggestions!: (query: string) => Observable<any[]>; // Fetch function for suggestions
-  @Input() placeholder: string = ''; // Placeholder text for the input
-  @Input() displayField: string = 'display_name'; // Field to display in the dropdown
+  @Input() fetchSuggestions!: (query: string) => Observable<any[]>; 
+  @Input() placeholder: string = ''; 
+  @Input() displayField: string = 'display_name'; 
 
-  @Output() optionSelected = new EventEmitter<any>(); // Emit selected option
+  @Output() optionSelected = new EventEmitter<any>(); 
 
   filteredOptions$: Observable<any[]> = of([]);
   isVisible: boolean = false;
  
   
   ngOnInit() {
-    // Log to ensure fetchSuggestions is available
-  console.log('fetchSuggestions:', this.fetchSuggestions);
-  console.log('control:', this.control);
-
-  // Delay execution to allow for bindings to be initialized
- 
+   
     if (!this.control || !this.fetchSuggestions) {
       console.error('AutocompleteComponent: Missing required inputs!');
       return;
@@ -73,15 +68,15 @@ export class AutocompleteComponent implements OnInit {
   handleBlur(event: FocusEvent): void {
     const relatedTarget = event.relatedTarget as HTMLElement;
   
-    // Check if the related target (blurred-to element) is part of the dropdown
+   
     if (
       relatedTarget &&
-      relatedTarget.closest('.dropdown-content') // Ensures blur doesn't close when clicking an option
+      relatedTarget.closest('.dropdown-content') 
     ) {
       return;
     }
   
-    this.isVisible = false; // Close the dropdown if the click is outside
+    this.isVisible = false; 
   }
   
   selectOption(option:any) {

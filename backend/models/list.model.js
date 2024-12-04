@@ -44,17 +44,17 @@ const listSchema = new Schema({
   },
   company: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company', // Assuming lists are associated with companies
+    ref: 'Company', 
     required: true,
   },
-  guests: [guestSchema], // Embedding guestSchema as an array
+  guests: [guestSchema], 
   event: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event', // Optional: link to a specific event
+    ref: 'Event', 
   },
 }, { timestamps: true });
 
-// Step 3: Export the Models
+
 const List = mongoose.model('List', listSchema);
 const Guest = mongoose.model('Guest', guestSchema);
 

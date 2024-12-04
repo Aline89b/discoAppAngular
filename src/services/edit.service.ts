@@ -6,18 +6,18 @@ import { Company } from '../models/company';
 import { event } from '../models/event';
 import { locale } from '../models/locale';
 import { Observable } from 'rxjs';
+import { baseUrl } from '../url';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class EditService {
-companyUrl = "http://localhost:3000/api/companies"
-eventUrl = "http://localhost:3000/api/events"
-localeUrl = "http://localhost:3000/api/locali"
-listUrl = "http://localhost:3000/api/lists"
-guestUrl = "http://localhost:3000/api/lists"
-qrcodeUrl = "http://localhost:3000/api/qrcodes"
+companyUrl = `${baseUrl}/api/companies`
+eventUrl = `${baseUrl}/api/events`
+localeUrl = `${baseUrl}/api/locali`
+listUrl = `${baseUrl}/api/lists`
+qrcodeUrl = `${baseUrl}/api/qrcodes`
 
   constructor(private http:HttpClient) { }
 
@@ -35,6 +35,10 @@ qrcodeUrl = "http://localhost:3000/api/qrcodes"
 
   editCompany(id: string, companyData:Company): Observable<any>{
     return this.http.patch(`${this.companyUrl}/${id}`, { companyData })
+  }
+
+  changeStatus(listId:string, guestId:string): Observable<any> {
+    return this.http.patch(`${this.listUrl}/${listId}/${guestId}`, { listId, guestId }); 
   }
 
 }

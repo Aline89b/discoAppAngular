@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const roleAuth = require('../middlewares/roleAuth')
-const {getLists,addList,deleteList,deleteGuest,addGuest,getListsById, getGuestById} = require('../controllers/lists.controller')
+const {getLists,addList,deleteList,deleteGuest,addGuest,getListsById, getGuestById,changeStatusGuest} = require('../controllers/lists.controller')
 const {authorizeRole, authenticateUser }= require('../middlewares/roleAuth')
 
 
@@ -12,5 +12,5 @@ router.delete('/:listId/:guestId',authorizeRole('PR','admin'), deleteGuest)
 router.post('/:id/guests', authorizeRole('PR','admin'), addGuest)
 router.get('/:id',getListsById)
 router.get('/:listId/:guestId',authenticateUser,authorizeRole('PR','admin'), getGuestById)
-
+router.patch('/:listId/:guestId', changeStatusGuest)
 module.exports = router

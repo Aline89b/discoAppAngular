@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable, of } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
 import { decodedToken } from '../models/decodedToken';
+import { baseUrl } from '../url';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ import { decodedToken } from '../models/decodedToken';
 
 
 export class AuthService {
-userUrl = "http://localhost:3000/api/users"
+userUrl = `${baseUrl}/api/users`
 
   constructor(private http: HttpClient,private cookie:CookieService) { }
 

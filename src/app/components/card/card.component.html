@@ -347,4 +347,24 @@
       <p>🏙️ email: {{ company.email }}</p>
     </div>
   </div>
+
+  <div
+    class="flex gap-2 flex-wrap max-w-screen-lg"
+    *ngIf="dataType === 'User' && !isEditingMode"
+  >
+    <div
+      class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
+      *ngFor="let user of users(); trackBy: trackByUser"
+    >
+      <div class="flex justify-between">
+        <div class="card-actions">
+          
+        <h2 class="card-title">{{ user.name }}</h2>
+        
+      </div>
+      <p>email: {{ user.email}}</p>
+      <p>role: {{ user.role }}</p>
+      
+      </div>
+  </div>
 </div>

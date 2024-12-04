@@ -8,6 +8,7 @@ import { CreateCardsDataService } from '../../../services/create-cards-data.serv
 import { Guest } from '../../../models/guest';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditService } from '../../../services/edit.service';
+import { baseUrl } from '../../../url';
 
 @Component({
   selector: 'app-guest-list',
@@ -30,18 +31,27 @@ export class GuestListComponent implements OnInit {
   formArray: FormArray = this.fb.array([]);
   guestForm!: FormGroup
   editedItemId = signal<string | null>(null);
-
+  checked:boolean = false
   editService =inject(EditService)
+  listId!:string
+  guestId!:string
+
   constructor() { }
 
   ngOnInit(): void {
-  
-  this.getLists()
+    const { listId, guestId } = history.state;
+    console.log(listId,guestId)
+    this.guestId= guestId
+    this.listId = listId
+    if(listId && guestId) {
+      this.scrollToList(listId)
+    }
+   this.getLists()
 
 
 }
 getLists(){
-  this.http.get('http://localhost:3000/api/lists').subscribe({
+  this.http.get( `${baseUrl}/api/lists`).subscribe({
     next: (res:any) => {
       console.log(res)
       this.lists.set(res); 
@@ -108,7 +118,7 @@ getGuests(){
   }
   
 deleteGuest(listId:string, guestId: string): void {
-  this.http.delete(`http://localhost:3000/api/lists/${listId}/${guestId}`).subscribe({
+  this.http.delete(`${baseUrl}/api/lists/${listId}/${guestId}`).subscribe({
     next: () => {
       console.log('Guest removed successfully');
       this.guests = this.guests.filter(guest => guest._id !== guestId);
@@ -192,6 +202,27 @@ save(){
   }
     
 */
+}
+
+scrollToList(listId: string) {
+  const listElement = document.getElementById(listId);
+  if (listElement) {
+    listElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    listElement.classList.add('highlight');
+  }
+}
+
+onCheckboxChange(event: Event): void {
+  const isChecked = (event.target as HTMLInputElement).checked;
+  if (isChecked) {
+    this.editService.changeStatus(this.listId,this.guestId).subscribe({
+      next: (res) => {console.log(res)},
+      error:(err)=>{
+        console.error(console.log(err))
+      }
+    })
+     
+  }
 }
 }
 
