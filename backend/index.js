@@ -17,7 +17,9 @@ const searchRoute = require('./routes/searchRoute')
 const mongoose = require('mongoose')
 const User = require('./models/users.model')
 
-app.use(cors({ origin: 'http://localhost:4200' }))
+app.use(cors({
+    origin: ['http://localhost:4200', 'https://disco-app-angular-2mkasj00t-aline89bs-projects.vercel.app']
+}));
 app.use(helmet())
 app.use(cookieParser())
 app.use(express.json())
