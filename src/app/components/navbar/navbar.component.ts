@@ -3,9 +3,9 @@ import { Router, RouterLink } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 import { FormControl } from '@angular/forms';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { baseUrl } from '../../../url';
-import { SearchResult } from '../../../models/searchResult';
+import { SearchResult, Option } from '../../../models/searchResult';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -29,13 +29,11 @@ logout() {
   }
  
 }
-fetchSuggestions = (query: string): Observable<any[]> => {
- 
- console.log(query)
- console.log(this.searchControl.value)
-  return this.http.post<any[]>(`${baseUrl}/api/search`, {query}).pipe(
-    map((results: SearchResult[]) =>
-      results.map((result: SearchResult) => ({
+fetchSuggestions = (query: string): Observable<Option[]> => {
+  return this.http.post<any[]>(`${baseUrl}/api/search`, { query }).pipe(
+    tap(results => console.log('API response:', results)),
+    map(results =>
+      results.map(result => ({
         name: result.name,
         id: result._id,
       }))
@@ -43,9 +41,11 @@ fetchSuggestions = (query: string): Observable<any[]> => {
   );
 };
 
-onOptionSelected(option: any) {
-  console.log('Selected option:', option);
-  // Navigate to the relevant page or perform an action
+onOptionSelected(option: Option) {
+  console.log(option.id)
+  this.searchControl.setValue(option.name); 
+  this.router.navigate([`/searchDetail/${option.id}`])
+  console.log(`/searchDetail/${option.id}`)
 }
 
 

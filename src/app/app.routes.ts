@@ -16,6 +16,7 @@ import { GuestListComponent } from './components/guest-list/guest-list.component
 import { CreateGuestListComponent } from './components/create-guest-list/create-guest-list.component';
 import { QrcodeComponent } from './components/qrcode/qrcode.component';
 import { ScanComponent } from './components/scan/scan.component';
+import { SearchDetailComponent } from './components/search-detail/search-detail.component';
 
 export const routes: Routes = [
   
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'resetPWrequest', component: ResetPWComponent },
   { path: 'page404', component: Page404Component },
   { path: 'qrcodes/:listId/:guestId', component: QrcodeComponent },
+  { path: 'searchDetail/:id', component: SearchDetailComponent },
   { path: 'invite-user', component: AuthFormComponent, canActivate: [authGuard],
     data: { roles: ['admin'] }, },
     { path: 'create-locale', component: CreateLocaleComponent, canActivate: [authGuard],

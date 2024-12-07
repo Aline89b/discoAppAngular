@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const signUpSchema = require("../middlewares/validators");
+const {signUpSchema} = require("../middlewares/validators");
 const User = require("../models/users.model");
 const Token = require("../models/token");
 const transport = require("../middlewares/sendMail");
@@ -17,6 +17,7 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   const { role, email, password } = req.body;
+  console.log(role, email, password)
 
   try {
     const { error, value } = signUpSchema.validate({ role, email, password });
@@ -24,7 +25,7 @@ const addUser = async (req, res) => {
     if (error) {
       return res
         .status(401)
-        .json({ success: false, message: error.details[0].message });
+        .json({ success: false, message: error.details[0].message || 'Invalid input' });
     }
 
     const ExistingUser = await User.findOne({ email });
@@ -289,7 +290,15 @@ const resetPW = async (req, res) => {
       .json({ message: "An error occurred while resetting password" });
   }
 };
-
+const getUserById = async(req,res) =>{
+  const { id } = req.params;
+  try {
+   const user = await User.findById(id);
+   return res.status(200).json(user)
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -315,4 +324,5 @@ module.exports = {
   resetPWrequest,
   resetPW,
   inviteUser,
+  getUserById
 };

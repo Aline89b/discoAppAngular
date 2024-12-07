@@ -1,0 +1,11 @@
+
+<div class="flex justify-center items-center h-screen">
+    <ng-container *ngIf="data">
+      <app-card [dataType]="dataType" [item]="data"></app-card>
+    </ng-container>
+  
+    <ng-container *ngIf="!data">
+      <p>Loading data or no details available...</p>
+    </ng-container>
+  </div>
+  

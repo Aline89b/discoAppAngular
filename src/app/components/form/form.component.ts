@@ -77,13 +77,13 @@ export class FormComponent implements OnInit {
       this.form = this.fb.group({
         name: [this.initialData.name || '', Validators.required],
         regione_sociale: [this.initialData.locale || '', Validators.required],
-        PI: [this.initialData.date || '', Validators.required, Validators.pattern('^IT\\d{11}$')],
-        SDI: [this.initialData.time || '', Validators.required,Validators.pattern('^[A-Za-z0-9]{7}$')],
+        PI: [this.initialData.date || '', [Validators.required, Validators.pattern('^IT\\d{11}$')]],
+        SDI: [this.initialData.time || '',[Validators.required,Validators.pattern('^[A-Za-z0-9]{7}$')]],
         address: [this.initialData.address || '', Validators.required],
         city: [this.initialData.city || '', Validators.required],
         zipCode:[this.initialData.city || '', Validators.required],
         email: [this.initialData.email || '', Validators.email],
-        phone: [this.initialData.phone || '',[Validators.required, Validators.pattern(/^\+39\d{9}$/)] ],
+        phone: [this.initialData.phone || '',[Validators.required, Validators.pattern(/^\+39\d{10}$/)] ],
       });
       
       

@@ -49,6 +49,10 @@ private usersSignal = signal<User[]>([])
     return this.http.get<locale>(`${endpoint}/${id}`)
   }
 
+  getUserById(endpoint:string,id:string): Observable<User> {
+    return this.http.get<User>(`${endpoint}/${id}`)
+  }
+
   fetchEvents(): void {
     this.http.get<event[]>(this.eventUrl).subscribe((eventsData) => {
       this.eventsSignal.set(eventsData);

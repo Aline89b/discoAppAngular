@@ -11,7 +11,7 @@ const companySchema = mongoose.Schema({
     address:{ type: String, required:true },
     city:{ type: String , required:true},
     zipCode:{ type: String, required:true },
-    ownerId:{type: String, required:true},
+    userId:{type: String, required:true},
     timestamp:{
         type:Date,
         default:Date.now

@@ -33,7 +33,7 @@ import { User } from '../../../models/user';
 
 export class CardComponent implements OnInit {
 
-  
+  @Input() item: any
   @Input() dataType: 'Company' | 'User' | 'locale' | 'event'= 'locale';
   places = this.dataService.places
   events = this.dataService.events;

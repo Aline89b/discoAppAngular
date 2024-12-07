@@ -93,9 +93,7 @@ export class AuthFormComponent implements OnInit {
 
     const {name, email, password, role } = this.authForm.value;
 
-    console.log(email, password, role);
-
-    if (this.isSignUp) {
+        if (this.isSignUp) {
       this.auth.addUser(email, password, role).subscribe({
         next: (res: any) => {
           console.log('Success:', res);
@@ -127,8 +125,7 @@ export class AuthFormComponent implements OnInit {
      }else {
       this.auth.logIn(email, password).subscribe({
         next: (res: any) => {
-          console.log('Success:', res);
-          console.log('Success:', res.token);
+        
           this.CookieService.set('token', res.token)
           this.CookieService.set('email', res.email)
           this.router.navigate(['/homepage']);

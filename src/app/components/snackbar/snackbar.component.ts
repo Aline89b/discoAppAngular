@@ -14,16 +14,19 @@ export class SnackbarComponent implements OnInit {
   constructor(public snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
+   
+      this.snackbarService.snackbarState$.subscribe(({ message, type }) => {
+        this.message = message;
+        this.isVisible = true;
+  
+       
+        setTimeout(() => {
+          this.isVisible = false;
+        }, 3000); 
+      });
+    }
     
-    this.snackbarService.snackbarState$.subscribe(({ message, type }) => {
-      this.message = message;
-      this.isVisible = true;
+    
 
-      // Auto-hide after a set time
-      setTimeout(() => {
-        this.isVisible = false;
-      }, 3000); // 3 seconds
-    });
-  }
 }
 

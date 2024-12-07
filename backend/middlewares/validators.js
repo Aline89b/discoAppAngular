@@ -2,10 +2,10 @@ const Joi = require("joi");
 const objectIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 
 const signUpSchema = Joi.object({
-  name: Joi.string(),
-  role: Joi.string(),
+  name: Joi.string().optional(),
+  role: Joi.string().required(),
   email: Joi.string().min(6).required(),
-  password: Joi.string().required(),
+  password: Joi.string().pattern(new RegExp(/^(?=.*[A-Z])(?=.*\d).*$/)).required(),
 });
 
 const companySchema = Joi.object({

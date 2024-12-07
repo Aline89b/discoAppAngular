@@ -20,22 +20,23 @@ const getEventsByCompany = async(req,res)=>{
           return res.status(401).json({ error: 'Authorization token required' });
         }
     
-        // Verify and decode the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Ensure JWT_SECRET is set in your environment variables
+       
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); 
     
         const userId = decoded.userId;
         const user = await User.findById(userId);
+        console.log('userId:',userId)
         if (!user) {
           return res.status(404).json({ error: 'User not found' });
         }
     
         const companyId = user.companyId; 
-        console.log(companyId)// Get companyId from the user document
+        console.log('companyId:',companyId)
         if (!companyId) {
           return res.status(400).json({ error: 'User has no associated company' });
         }
     
-        // Fetch events associated with this companyId
+      
         const events = await Event.find({ companyId: companyId });
         console.log(events)
         res.status(200).json(events);

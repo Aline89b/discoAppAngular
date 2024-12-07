@@ -82,8 +82,8 @@ export class AutocompleteComponent implements OnInit {
   selectOption(option:any) {
   
     console.log('Option selected:', option);
-    this.optionSelected.emit(option); // Notify the parent component
-    this.isVisible = false; // Hide the dropdown
+    this.optionSelected.emit(option);
+    this.isVisible = false; 
   }
   
   

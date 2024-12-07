@@ -20,9 +20,9 @@ export class AppComponent {
   
   title = 'discoAppAngular';
   constructor(private router: Router) {}
-
+  
   shouldShowNav(): boolean {
-    // Define the routes where the nav should be hidden
+    
     
      if(this.router.url.includes('/login') || this.router.url.includes('/signup') ){
       return false
