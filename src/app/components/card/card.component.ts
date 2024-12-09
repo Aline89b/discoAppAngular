@@ -87,18 +87,28 @@ searchService = inject(SearchService)
     
     
    }
+   this.route.params.subscribe(params => {
+    const id = params['id']; // Fetch the ID from the route
+    this.getItemDetails(id);
+  });
    const id = this.route.snapshot.paramMap.get('id');
    console.log(id)
+   if(id){
+    this.route.params.subscribe(params => {
+      const id = params['id']; 
+      this.getItemDetails(id);
+    });
+   }
+   
     const token = this.cookie.get('token')
     const decodedToken:decodedToken = jwtDecode(token)
         console.log(decodedToken.role)
         this.role= decodedToken.role
         this.userId = decodedToken.userId
-        if(id){
-          this.getItemDetails(id)
-        }else if(this.role = 'Admin'){
+        
+         if(!id && this.role === 'Admin'){
           this.loadData()
-        }else{
+        }else if(!id && this.role !== 'Admin'){
           this.loadDataById(this.userId)
         }
       
@@ -152,7 +162,7 @@ getItemDetails(id:string){
   if (this.dataType === 'locale'){
   
     this.dataService.getPlaceById(endpoint,id).subscribe({
-      next: (res) => this.item = res,
+      next: (res) => this.item = {...res},
       error: (err) => console.error('Error :', err)
     });;
     
@@ -160,8 +170,9 @@ getItemDetails(id:string){
     
     this.dataService.getCompanyById(endpoint,id).subscribe({
       next: (res) => {
-        this.item = res
-        this.cdr.detectChanges()
+        this.item =  {...res}
+       
+        
       },
       error: (err) => console.error('Error :', err)
     });
@@ -169,8 +180,10 @@ getItemDetails(id:string){
 
     this.dataService.getEventById(endpoint,id).subscribe({
       next: (res) => {
-        this.item = res
-        this.cdr.detectChanges()
+        this.item = {...res}
+        
+        
+        console.log(this.item)
       },
       error: (err) => console.error('Error :', err)
     });;
@@ -178,8 +191,9 @@ getItemDetails(id:string){
 
     this.dataService.getUserById(endpoint,id).subscribe({
       next: (res) => {
-        this.item = res
-        this.cdr.detectChanges()
+        this.item =  {...res}
+        
+        
       },
       error: (err) => console.error('Error :', err)
     });;

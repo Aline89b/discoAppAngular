@@ -171,22 +171,75 @@
     class="flex gap-2 flex-wrap max-w-screen-lg"
     *ngIf="dataType === 'event'"
   >
-  <ng-container *ngIf="isEditingMode" >
-    
+      
       <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
       [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== event._id }"
       *ngFor="let event of events(); trackBy: trackByEvent"
     >
     
-      <div class="flex justify-between">
-        <form *ngIf="editedItemId() === event._id"  [formGroup]="eventForm" class="flex flex-col justify-between">
+          <form  [formGroup]="eventForm">
+            <div class="flex justify-between">
+              <div class="card-actions">
+                <button (click)="editElement(event._id)" class="btn btn-circle">
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div>
+                <h2
+                  *ngIf="!isEditingMode && editedItemId() !== event._id"
+                  class="card-title"
+                >
+                  {{ event.name }}
+                </h2>
           <input
+          *ngIf="isEditingMode && editedItemId() === event._id"
             type="text"
             formControlName="name"
-            class="input input-bordered w-full mb-4"
+            class="input input-ghost w-full mb-4"
           />
+              </div>
+              <div class="card-actions">
+                <button (click)="deleteElement(event._id)" class="btn btn-circle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    class="h-6 w-6"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
 
-          <div class="flex">
+          <div >
+            <p
+            *ngIf="!isEditingMode && editedItemId() !== event._id"
+            class="card-title"
+          >
+          ⏰ Time: {{ event.time }}
+          </p>
+          <div
+            *ngIf="isEditingMode && editedItemId() === event._id"
+            class="flex"
+          >
             <label>⏰ Time:</label>
             <input
               type="time"
@@ -194,103 +247,92 @@
               class="input input-ghost w-full mb-4"
             />
           </div>
-          <div class="flex">
+          </div>
+          <div>
+            <p
+              *ngIf="!isEditingMode && editedItemId() !== event._id"
+              class="card-title"
+            >
+            🏙️ Locale: {{ event.locale }}
+            </p>
+            <div
+            *ngIf="isEditingMode && editedItemId() === event._id"
+            class="flex"
+          >
             <label>🏙️ Locale: </label>
             <app-autocomplete
+            class="inpu input-ghost"
                 [control]= "eventControl"
                 [fetchSuggestions]="fetchLocale"
                 placeholder="Enter locale"
                 [displayField]="'name'"
                 (optionSelected)="selectLocale($event)"
             ></app-autocomplete>
-           
+            </div>
           </div>
-          <div class="flex">
-            <label>📅 Date: </label>
+          <div>
+            <p
+            *ngIf="!isEditingMode && editedItemId() !== event._id"
+            class="card-title"
+          >
+          📅 Date: {{ event.date | date}}
+          </p>
+          <div
+          *ngIf="isEditingMode && editedItemId() === event._id"
+          class="flex"
+        >
+           <label>📅 Date: </label>
             <input
               type="date"
               formControlName="date"
               class="input input-ghost w-full mb-4"
             />
+           </div>
           </div>
-          <div class="flex">
-            <label>💲 Price: </label>
-            <input
-              type="text"
-              formControlName="price"
-              class="input input-ghost w-full mb-4"
-            />
+          <div>
+            <p
+            *ngIf="!isEditingMode && editedItemId() !== event._id"
+            class="card-title"
+          >
+          💲 Price: {{ event.price | currency }}
+          </p>
+            <div *ngIf="!isEditingMode && editedItemId() === event._id" class="flex">
+              <label>💲 Price: </label>
+              <input
+                type="text"
+                formControlName="price"
+                class="input input-ghost w-full mb-4"
+              />
+            </div>
           </div>
-
           <div class="card-actions justify-end">
-            <button (click)="cancel()" class="btn btn-info">cancel</button>
-            <button (click)="save()" class="btn btn-info">
+            <button
+              *ngIf="isEditingMode && editedItemId() === event._id"
+              (click)="cancel()"
+              class="btn btn-info"
+            >
+              cancel
+            </button>
+            <button
+              *ngIf="isEditingMode && editedItemId() === event._id"
+              (click)="save()"
+              class="btn btn-info"
+            >
               save
+            </button>
+            <button
+              *ngIf="!isEditingMode && editedItemId() !== event._id"
+              class="btn btn-info"
+              routerLink="/guest-list"
+            >
+             manda invito
             </button>
           </div>
         </form>
+        
       </div>
-        </div>
-      </ng-container>
+  
    </div>
-
-   <!-- event view mode-->
-  <div
-    class="flex gap-2 flex-wrap max-w-screen-lg"
-    *ngIf="dataType === 'event' && !isEditingMode"
-  >
-    <div
-      class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
-      *ngFor="let event of events(); trackBy: trackByEvent"
-    >
-      <div class="flex justify-between">
-        <div class="card-actions">
-          <button (click)="editElement(event._id)" class="btn btn-circle">
-            <svg
-              class="w-6 h-6 text-gray-800 dark:text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-              />
-            </svg>
-          </button>
-        </div>
-        <h2 class="card-title">{{ event.name }}</h2>
-        <div class="card-actions justify-end">
-          <button (click)="deleteElement(event._id)" class="btn btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              x="0px"
-              y="0px"
-              class="h-6 w-6"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
-              ></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <p>⏰ Time: {{ event.time }}</p>
-      <p>🏙️ Locale: {{ event.locale }}</p>
-      <p>📅 Date: {{ event.date | date }}</p>
-      <p>💲 Price: {{ event.price | currency }}</p>
-      <div class="card-actions justify-end">
-        <button routerLink="/guest-list" class="btn btn-info">
-          manda invito
-        </button>
-      </div>
-    </div>
-  </div>
 
   <div
     class="flex gap-2 flex-wrap max-w-screen-lg overflow-auto"
@@ -529,58 +571,168 @@
 
 </div>
 <div *ngIf="item && dataType === 'event'">
-  <div
-  class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
+  <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
+  [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== item._id }"
   
 >
-  <div class="flex justify-between">
-    <div class="card-actions">
-      <button (click)="editElement(item._id)" class="btn btn-circle">
-        <svg
-          class="w-6 h-6 text-gray-800 dark:text-white"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+
+      <form  [formGroup]="eventForm">
+        <div class="flex justify-between">
+          <div class="card-actions">
+            <button (click)="editElement(item._id)" class="btn btn-circle">
+              <svg
+                class="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <h2
+              *ngIf="!isEditingMode && editedItemId() !== item._id"
+              class="card-title"
+            >
+              {{ item.name }}
+            </h2>
+      <input
+      *ngIf="isEditingMode && editedItemId() === item._id"
+        type="text"
+        formControlName="name"
+        class="input input-ghost w-full mb-4"
+      />
+          </div>
+          <div class="card-actions">
+            <button (click)="deleteElement(item._id)" class="btn btn-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                x="0px"
+                y="0px"
+                class="h-6 w-6"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      <div >
+        <p
+        *ngIf="!isEditingMode && editedItemId() !== item._id"
+        class="card-title"
+      >
+      ⏰ Time: {{ item.time }}
+      </p>
+      <div
+        *ngIf="isEditingMode && editedItemId() === item._id"
+        class="flex"
+      >
+        <label>⏰ Time:</label>
+        <input
+          type="time"
+          formControlName="time"
+          class="input input-ghost w-full mb-4"
+        />
+      </div>
+      </div>
+      <div>
+        <p
+          *ngIf="!isEditingMode && editedItemId() !== item._id"
+          class="card-title"
         >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+        🏙️ Locale: {{ item.locale }}
+        </p>
+        <div
+        *ngIf="isEditingMode && editedItemId() === item._id"
+        class="flex"
+      >
+        <label>🏙️ Locale: </label>
+        <app-autocomplete
+        class="inpu input-ghost"
+            [control]= "eventControl"
+            [fetchSuggestions]="fetchLocale"
+            placeholder="Enter locale"
+            [displayField]="'name'"
+            (optionSelected)="selectLocale($event)"
+        ></app-autocomplete>
+        </div>
+      </div>
+      <div>
+        <p
+        *ngIf="!isEditingMode && editedItemId() !== item._id"
+        class="card-title"
+      >
+      📅 Date: {{ item.date | date}}
+      </p>
+      <div
+      *ngIf="isEditingMode && editedItemId() === item._id"
+      class="flex"
+    >
+       <label>📅 Date: </label>
+        <input
+          type="date"
+          formControlName="date"
+          class="input input-ghost w-full mb-4"
+        />
+       </div>
+      </div>
+      <div>
+        <p
+        *ngIf="!isEditingMode && editedItemId() !== item._id"
+        class="card-title"
+      >
+      💲 Price: {{ item.price | currency }}
+      </p>
+        <div *ngIf="!isEditingMode && editedItemId() === item._id" class="flex">
+          <label>💲 Price: </label>
+          <input
+            type="text"
+            formControlName="price"
+            class="input input-ghost w-full mb-4"
           />
-        </svg>
-      </button>
-    </div>
-    <h2 class="card-title">{{ item.name }}</h2>
-    <div class="card-actions justify-end">
-      <button (click)="deleteElement(item._id)" class="btn btn-circle">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          x="0px"
-          y="0px"
-          class="h-6 w-6"
-          viewBox="0 0 24 24"
+        </div>
+      </div>
+      <div class="card-actions justify-end">
+        <button
+          *ngIf="isEditingMode && editedItemId() === item._id"
+          (click)="cancel()"
+          class="btn btn-info"
         >
-          <path
-            d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
-          ></path>
-        </svg>
-      </button>
-    </div>
+          cancel
+        </button>
+        <button
+          *ngIf="isEditingMode && editedItemId() === item._id"
+          (click)="save()"
+          class="btn btn-info"
+        >
+          save
+        </button>
+        <button
+          *ngIf="!isEditingMode && editedItemId() !== item._id"
+          class="btn btn-info"
+          routerLink="/guest-list"
+        >
+         manda invito
+        </button>
+      </div>
+    </form>
+    
   </div>
-  <p>⏰ Time: {{ item.time }}</p>
-  <p>🏙️ Locale: {{ item.locale }}</p>
-  <p>📅 Date: {{ item.date | date }}</p>
-  <p>💲 Price: {{ item.price | currency }}</p>
-  <div class="card-actions justify-end">
-    <button routerLink="/guest-list" class="btn btn-info">
-      manda invito
-    </button>
-  </div>
+
 </div>
-</div>
+
 <div *ngIf="item && dataType === 'Company'">
   <div
   class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%]"
@@ -633,6 +785,7 @@
 </div>
 </div>
 </div>
+
 <div *ngIf="item && dataType === 'User'">
   <div
   class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"

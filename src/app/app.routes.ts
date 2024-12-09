@@ -29,7 +29,7 @@ export const routes: Routes = [
   { path: 'resetPWrequest', component: ResetPWComponent },
   { path: 'page404', component: Page404Component },
   { path: 'qrcodes/:listId/:guestId', component: QrcodeComponent },
-  { path: 'searchDetail/:id', component: SearchDetailComponent },
+  { path: 'searchDetail/:id', component: SearchDetailComponent,runGuardsAndResolvers: 'paramsChange' },
   { path: 'invite-user', component: AuthFormComponent, canActivate: [authGuard],
     data: { roles: ['admin'] }, },
     { path: 'create-locale', component: CreateLocaleComponent, canActivate: [authGuard],
