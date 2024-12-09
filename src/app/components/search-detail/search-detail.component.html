@@ -1,11 +1,25 @@
+<app-card
+  *ngIf="dataType === 'locale'"
+  dataType="locale"
+ >
+</app-card>
+<app-card
+  *ngIf="dataType === 'event'"
+  dataType="event"
+ >
+</app-card>
 
-<div class="flex justify-center items-center h-screen">
-    <ng-container *ngIf="data">
-      <app-card [dataType]="dataType" [item]="data"></app-card>
-    </ng-container>
-  
-    <ng-container *ngIf="!data">
-      <p>Loading data or no details available...</p>
-    </ng-container>
-  </div>
-  
+<app-card
+  *ngIf="dataType === 'Company'"
+  dataType="Company"
+ >
+</app-card>
+<app-card
+  *ngIf="dataType === 'User'"
+  dataType="User"
+ >
+</app-card>
+
+<div *ngIf="!dataType">
+  Loading data...
+</div>

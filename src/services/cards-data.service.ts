@@ -45,14 +45,6 @@ private usersSignal = signal<User[]>([])
     });
   }
 
-  getPlaceById(endpoint:string,id:string): Observable<locale> {
-    return this.http.get<locale>(`${endpoint}/${id}`)
-  }
-
-  getUserById(endpoint:string,id:string): Observable<User> {
-    return this.http.get<User>(`${endpoint}/${id}`)
-  }
-
   fetchEvents(): void {
     this.http.get<event[]>(this.eventUrl).subscribe((eventsData) => {
       this.eventsSignal.set(eventsData);
@@ -65,13 +57,7 @@ private usersSignal = signal<User[]>([])
       console.log(eventsData)
     });
   }
-  getEventById(endpoint:string,id:string): Observable<event> {
-    return this.http.get<event> (`${endpoint}/${id}`)
-  }
-  getEventByCompany():Observable<event[]> {
-    return this.http.get<event[]> ( `${this.eventUrl}/byCompany `)
-  }
-
+ 
   fetchCompanies(): void {
     this.http.get<Company[]>(this.companyUrl).subscribe((companiesData) => {
       this.companiesSignal.set(companiesData);
@@ -80,11 +66,14 @@ private usersSignal = signal<User[]>([])
   }
 
   fetchCompaniesById(id:string): void {
-    this.http.get<Company[]>(`${this.companyUrl}/${id}`).subscribe((companiesData) => {
+    this.http.get<Company[]>(`${this.companyUrl}/byUser/${id}`).subscribe((companiesData) => {
       this.companiesSignal.set(companiesData);
       console.log(companiesData)
     });
   }
+
+ 
+  /*
   getCompanyById(endpoint:string, id:string):void{
     this.http.get<Company>(`${endpoint}/${id}`).subscribe((companyData) => {
       this.companiesSignal.set([companyData]);
@@ -92,15 +81,35 @@ private usersSignal = signal<User[]>([])
     });
     
   }
+    */
   fetchUserById( id:string):void{
     this.http.get<User>(`${this.userUrl}/${id}`).subscribe((User) => {
       this.usersSignal.set([User]);
       console.log(User)
     })
   }
-  
+  getPlaceById(endpoint:string,id:string): Observable<locale> {
+    return this.http.get<locale>(`${endpoint}/${id}`)
+  }
+
+  getUserById(endpoint:string,id:string): Observable<User> {
+    return this.http.get<User>(`${endpoint}/${id}`)
+  }
+  getEventById(endpoint:string,id:string): Observable<event> {
+    return this.http.get<event> (`${endpoint}/${id}`)
+  }
+  getEventByCompany():Observable<event[]> {
+    return this.http.get<event[]> ( `${this.eventUrl}/byCompany `)
+  }
+
+  getCompanyById(endpoint:string,id:string): Observable<Company> {
+    return this.http.get<Company> (`${endpoint}/${id}`)
+  }
   getGuestById(listId:String, guestId:string): Observable<Guest> {
     return this.http.get<Guest> (`${this.listUrl}/${listId}/${guestId}`)
+  }
+  deleteElement(endpoint:string,id:string){
+    return this.http.delete(`${endpoint}/${id}`)
   }
     get places() {
     return this.placesSignal
@@ -116,7 +125,5 @@ private usersSignal = signal<User[]>([])
   get users() {
     return this.usersSignal
   }
-  deleteElement(endpoint:string,id:string){
-    return this.http.delete(`${endpoint}/${id}`)
-  }
+  
 }

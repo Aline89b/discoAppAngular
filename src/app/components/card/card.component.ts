@@ -1,7 +1,7 @@
 
-import { Component, effect, inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import { DataService } from '../../../services/cards-data.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, I18nPluralPipe } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
 import { decodedToken } from '../../../models/decodedToken';
@@ -15,9 +15,10 @@ import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 import { EditService } from '../../../services/edit.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { baseUrl } from '../../../url';
 import { User } from '../../../models/user';
+import { SearchService } from '../../../services/search.service';
 
 
 
@@ -33,13 +34,13 @@ import { User } from '../../../models/user';
 
 export class CardComponent implements OnInit {
 
-  @Input() item: any
-  @Input() dataType: 'Company' | 'User' | 'locale' | 'event'= 'locale';
-  places = this.dataService.places
-  events = this.dataService.events;
-  companies = this.dataService.companies
+  @Input() dataType:'List' | 'Company' | 'User' | 'locale' | 'event'= 'locale';
+   item:any
+   places = this.dataService.places
+   events = this.dataService.events;
+   companies = this.dataService.companies
   users = this.dataService.users
-
+cdr= inject(ChangeDetectorRef)
   cookie =inject(CookieService)
   role = ''
   userId = ''
@@ -54,7 +55,8 @@ placeControl!: FormControl
 
 http = inject(HttpClient)
 editService = inject(EditService)
-
+route = inject(ActivatedRoute)
+searchService = inject(SearchService)
   constructor(private dataService: DataService) { 
    }
   ngOnInit(): void {
@@ -85,19 +87,21 @@ editService = inject(EditService)
     
     
    }
-
+   const id = this.route.snapshot.paramMap.get('id');
+   console.log(id)
     const token = this.cookie.get('token')
     const decodedToken:decodedToken = jwtDecode(token)
         console.log(decodedToken.role)
         this.role= decodedToken.role
         this.userId = decodedToken.userId
-        if(this.role = 'Admin'){
+        if(id){
+          this.getItemDetails(id)
+        }else if(this.role = 'Admin'){
           this.loadData()
         }else{
           this.loadDataById(this.userId)
         }
-  
-  
+      
   }
   
 loadData(){
@@ -133,6 +137,55 @@ loadDataById(id:string){
     this.dataService.fetchUserById(id);
   }
 }
+
+getItemDetails(id:string){
+  let endpoint = '';
+  if (this.dataType === 'locale') {
+    endpoint = `${baseUrl}/api/locali`;
+  } else if (this.dataType === 'Company') {
+    endpoint = `${baseUrl}/api/companies`;
+  } else if (this.dataType === 'event') {
+    endpoint = `${baseUrl}/api/events`;
+  }else if (this.dataType === 'User') {
+    endpoint = `${baseUrl}/api/users`;
+  }
+  if (this.dataType === 'locale'){
+  
+    this.dataService.getPlaceById(endpoint,id).subscribe({
+      next: (res) => this.item = res,
+      error: (err) => console.error('Error :', err)
+    });;
+    
+  }else if(this.dataType === 'Company'){
+    
+    this.dataService.getCompanyById(endpoint,id).subscribe({
+      next: (res) => {
+        this.item = res
+        this.cdr.detectChanges()
+      },
+      error: (err) => console.error('Error :', err)
+    });
+  }else if(this.dataType === 'event'){
+
+    this.dataService.getEventById(endpoint,id).subscribe({
+      next: (res) => {
+        this.item = res
+        this.cdr.detectChanges()
+      },
+      error: (err) => console.error('Error :', err)
+    });;
+  }else if(this.dataType === 'User'){
+
+    this.dataService.getUserById(endpoint,id).subscribe({
+      next: (res) => {
+        this.item = res
+        this.cdr.detectChanges()
+      },
+      error: (err) => console.error('Error :', err)
+    });;
+  }
+}
+
 
 deleteElement(id:string){
   let endpoint = '';

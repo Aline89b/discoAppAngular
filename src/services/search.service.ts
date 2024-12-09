@@ -17,7 +17,7 @@ export class SearchService {
     return this.http.post<any[]>(`${baseUrl}/search`, { query });
   }
 
-  // Fetch item details by id
+  
   getItemDetails(id: string): Observable<any> {
     return this.http.get<any>(`${baseUrl}/api/search/searchDetail/${id}`);  
   }

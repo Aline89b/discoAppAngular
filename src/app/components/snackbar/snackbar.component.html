@@ -1,4 +1,4 @@
-<div *ngIf="isVisible" class="fixed bottom-5 right-5 w-80" [ngClass]="{ 'hidden': !isVisible }">
+<div *ngIf="isVisible" class="fixed top-20 right-5 w-80" [ngClass]="{ 'hidden': !isVisible }">
     <div
       class="alert shadow-lg {{ snackbarService.getAlertClass() }}"
       (click)="isVisible = false"
