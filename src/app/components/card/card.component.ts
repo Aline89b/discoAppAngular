@@ -52,7 +52,7 @@ eventForm! : FormGroup
 placeForm! : FormGroup
 eventControl!:FormControl
 placeControl!: FormControl
-
+isLoading:boolean = true
 http = inject(HttpClient)
 editService = inject(EditService)
 route = inject(ActivatedRoute)
@@ -100,13 +100,16 @@ searchService = inject(SearchService)
       if(id){
         this.getItemDetails(id);
         console.log(id)
+        this.isLoading = false
       }  else if (!id) {
         if (this.role === 'admin') {
           console.log('Admin Role: Loading all data...');
           this.loadData();
+          this.isLoading = false
         } else {
           console.log('Non-Admin Role: Loading user-specific data...');
           this.loadDataById(this.userId);
+          this.isLoading = false
         }
       } else {
         console.error('Unhandled case!');

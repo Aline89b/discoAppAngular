@@ -35,7 +35,7 @@ export class GuestListComponent implements OnInit {
   editService =inject(EditService)
   listId!:string
   guestId!:string
-
+  isLoading: boolean = true
   constructor() { }
 
   ngOnInit(): void {
@@ -56,11 +56,12 @@ getLists(){
       console.log(res)
       this.lists.set(res); 
       this.initFormArray(res);
-      
+      this.isLoading = false
     },
     error: (err) => {
       console.error('Error fetching lists:', err);
       this.snackbar.show(err.error.message, "error");
+      this.isLoading = false
     }
   });
 }

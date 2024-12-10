@@ -1,6 +1,10 @@
 <div
   class="flex h-[calc(100vh-8rem)] items-center justify-center overflow-auto max-w-screen flex-wrap bg-gray-100 p-4"
 >
+<div *ngIf="isLoading" class="flex justify-center">
+  <span class="loading loading-dots loading-lg"></span>
+
+</div>
   <div
     class="flex gap-2 flex-wrap max-w-screen-lg"
     *ngIf="dataType === 'locale'"

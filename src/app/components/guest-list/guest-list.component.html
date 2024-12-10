@@ -1,4 +1,9 @@
 
+<div *ngIf="isLoading">
+  <span class="loading loading-dots loading-lg"></span>
+
+</div>
+
 <div *ngIf="!lists().length">
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
   <div class="card bg-white p-6 rounded-lg shadow-md w-full max-w-md  flex flex-col gap-2 items-center">
