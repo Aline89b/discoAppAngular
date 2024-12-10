@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const { timestamp } = require('rxjs')
+const mongoose = require('mongoose')
+
 
 const localeSchema = mongoose.Schema({
 

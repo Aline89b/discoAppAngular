@@ -170,4 +170,33 @@ const getListsById = async (req,res) =>{
   
   }
 
-module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById, getGuestById,changeStatusGuest }
+  const editList = async(req,res) =>{
+    try {
+        
+        const { id,name, event, guests } = req.body; 
+    
+        try {
+           
+            const list = await List.findById(id);
+    
+            if (!list) {
+                return res.status(404).json({ message: "List not found" });
+            }
+    
+           
+            if (name) list.name = name;
+            if (event) list.event = event;
+            if (guests && Array.isArray(guests)) {
+                list.guests = guests; 
+            }
+    
+           
+            const updatedList = await list.save();
+    
+            res.status(200).json({ message: "List updated successfully", updatedList });
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+  }
+
+module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById, getGuestById,changeStatusGuest, editList }

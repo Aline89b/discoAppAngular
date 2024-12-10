@@ -87,30 +87,34 @@ searchService = inject(SearchService)
     
     
    }
-   this.route.params.subscribe(params => {
-    const id = params['id']; // Fetch the ID from the route
-    this.getItemDetails(id);
-  });
-   const id = this.route.snapshot.paramMap.get('id');
-   console.log(id)
-   if(id){
-    this.route.params.subscribe(params => {
-      const id = params['id']; 
-      this.getItemDetails(id);
-    });
-   }
    
-    const token = this.cookie.get('token')
-    const decodedToken:decodedToken = jwtDecode(token)
-        console.log(decodedToken.role)
-        this.role= decodedToken.role
-        this.userId = decodedToken.userId
-        
-         if(!id && this.role === 'Admin'){
-          this.loadData()
-        }else if(!id && this.role !== 'Admin'){
-          this.loadDataById(this.userId)
+  
+   const token = this.cookie.get('token')
+   const decodedToken:decodedToken = jwtDecode(token)
+      
+       this.role= decodedToken.role
+       this.userId = decodedToken.userId
+        this.route.params.subscribe(params => {
+      const id = params['id'];
+      console.log(this.role)
+      if(id){
+        this.getItemDetails(id);
+        console.log(id)
+      }  else if (!id) {
+        if (this.role === 'admin') {
+          console.log('Admin Role: Loading all data...');
+          this.loadData();
+        } else {
+          console.log('Non-Admin Role: Loading user-specific data...');
+          this.loadDataById(this.userId);
         }
+      } else {
+        console.error('Unhandled case!');
+      }
+      
+    })
+   
+  
       
   }
   
@@ -162,7 +166,10 @@ getItemDetails(id:string){
   if (this.dataType === 'locale'){
   
     this.dataService.getPlaceById(endpoint,id).subscribe({
-      next: (res) => this.item = {...res},
+      next: (res) => {
+        this.item = {...res}
+        console.log(this.item)
+      },
       error: (err) => console.error('Error :', err)
     });;
     
@@ -171,9 +178,8 @@ getItemDetails(id:string){
     this.dataService.getCompanyById(endpoint,id).subscribe({
       next: (res) => {
         this.item =  {...res}
-       
-        
-      },
+        console.log(this.item)
+       },
       error: (err) => console.error('Error :', err)
     });
   }else if(this.dataType === 'event'){
@@ -181,8 +187,6 @@ getItemDetails(id:string){
     this.dataService.getEventById(endpoint,id).subscribe({
       next: (res) => {
         this.item = {...res}
-        
-        
         console.log(this.item)
       },
       error: (err) => console.error('Error :', err)

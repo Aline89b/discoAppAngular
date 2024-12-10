@@ -28,7 +28,7 @@ const sendQRcode = async (req,res) => {
             width: 500,
         });
          
-        const qrcodeUrl  = `${process.env.NGROK_URL}/api/qrcodes/${listId}/${guestId}.png`;
+        const qrcodeUrl  = `${process.env.QRCODE_URL}/api/qrcodes/${listId}/${guestId}.png`;
       
         expirationDate.setMonth(expirationDate.getMonth() + 1);
 

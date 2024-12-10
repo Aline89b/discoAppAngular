@@ -181,14 +181,25 @@ save(){
     console.error('No element is being edited.');
     return;
   }
-
-  
-  let payload: any = {};
   const id = this.editedItemId();
-   console.log(id)
-   /* payload = this.listForm.value; 
-    
-    this.editService.editList(id!,payload).subscribe({
+  console.log(id)
+  const formGroupIndex = this.lists().findIndex(list => list._id === id);
+
+  if (formGroupIndex === -1) {
+    console.error('No matching list found for the provided ID.');
+    return;
+  }
+
+  const listFormGroup = this.getFormGroupAt(formGroupIndex);
+  let payload: any = {};
+  
+   payload = {
+    name: listFormGroup.get('name')?.value,
+    event: listFormGroup.get('event')?.value,
+    guests: listFormGroup.get('guests')?.value,
+  };
+   
+     this.editService.editList(id!,payload).subscribe({
       next: (response) => {
         console.log('Update successful:', response);
         this.isEditing = false;
@@ -201,8 +212,8 @@ save(){
     });
   }
     
-*/
-}
+
+
 
 scrollToList(listId: string) {
   const listElement = document.getElementById(listId);

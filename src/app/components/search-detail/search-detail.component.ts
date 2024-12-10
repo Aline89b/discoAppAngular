@@ -20,12 +20,13 @@ export class SearchDetailComponent implements OnInit {
   route = inject(ActivatedRoute)
   constructor(){}
 ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
-   console.log(id)
+  this.route.params.subscribe(params => {
+    const id = params['id'];
+    if(id){
    this.getItemDetails(id!)
-  
+    }
+})
 }
-
 getItemDetails(id:string){
   this.searchService.getItemDetails(id).subscribe(item=>{
    console.log(item)

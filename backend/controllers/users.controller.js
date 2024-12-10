@@ -52,7 +52,7 @@ const addUser = async (req, res) => {
 
     console.log(user);
 
-    const verificationLink = `http://localhost:3000/api/users/verify/${userId}/${token}`;
+    const verificationLink = `https://discoappangular-1.onrender.com/api/users/verify/${userId}/${token}`;
     await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
@@ -108,7 +108,7 @@ const inviteUser = async (req, res) => {
 
     console.log(user);
     const userId = user._id;
-    const linkResetPW = `http://localhost:4200/resetPW/${userId}`;
+    const linkResetPW = `disco-app-angular.vercel.app/resetPW/${userId}`;
     const verificationCode = crypto.randomInt(100000, 999999).toString();
     await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
