@@ -171,7 +171,7 @@ const getListsById = async (req,res) =>{
   }
 
   const editList = async(req,res) =>{
-    try {
+  
         
         const { id,name, event, guests } = req.body; 
     
