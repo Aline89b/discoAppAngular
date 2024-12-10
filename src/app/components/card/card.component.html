@@ -1,5 +1,5 @@
 <div
-  class="flex h-[calc(100vh-8rem)] items-center justify-center overflow-auto max-w-screen flex-wrap bg-gray-100 p-4"
+  class="flex h-[calc(100vh-8rem)] items-center justify-center overflow-auto top-4 max-w-screen flex-wrap bg-gray-100 p-2"
 >
 <div *ngIf="isLoading" class="flex justify-center">
   <span class="loading loading-dots loading-lg"></span>
@@ -12,7 +12,7 @@
   
 
     <div
-      class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%]"
+      class="bg-white p-4 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] "
       [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== place._id }"
       *ngFor="let place of places(); trackBy: trackByPlace"
     >
@@ -41,10 +41,10 @@
           <div>
             <h2
               *ngIf="!isEditingMode && editedItemId() !== place._id"
-              class="card-title"
+              class="card-title "
             >
               {{ place.name }}
-            </h2>
+          </h2>
             <input
               *ngIf="isEditingMode && editedItemId() === place._id"
               type="text"

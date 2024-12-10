@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
 import { decodedToken } from '../../../models/decodedToken';
 import { LocaleOption } from '../../../models/locale';
+import { baseUrl } from '../../../url';
 
 @Component({
   selector: 'app-form',
@@ -99,7 +100,7 @@ export class FormComponent implements OnInit {
 
   fetchLocale(value: string):Observable<LocaleOption[]>{
     if (value.length < 3) return of([]);
-return this.http.get('http://localhost:3000/api/locali').pipe(
+return this.http.get(`${baseUrl}/api/locali`).pipe(
   map((locali:any) =>
     locali.map((locale:LocaleOption) =>({
        name: locale.name,

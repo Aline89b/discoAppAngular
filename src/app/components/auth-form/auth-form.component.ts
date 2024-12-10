@@ -24,7 +24,7 @@ export class AuthFormComponent implements OnInit {
   isSignUp: boolean = false;
   isInvitingUser: boolean = false;
   CookieService = inject(CookieService);
-
+  isLoading:boolean = true;
   roles: Array<{ value: string; label: string }> = [
     { value: 'admin', label: 'admin' },
     { value: 'manager', label: 'manager' },
@@ -60,6 +60,7 @@ export class AuthFormComponent implements OnInit {
       if (this.isSignUp || this.isInvitingUser) {
         if (!this.authForm.contains('role')) {
           this.authForm.addControl('role', new FormControl('', Validators.required));
+         
         }
       } else {
         if (this.authForm.contains('role')) {
@@ -98,6 +99,7 @@ export class AuthFormComponent implements OnInit {
         next: (res: any) => {
           console.log('Success:', res);
           this.snackbar.show(res.message,"success")
+          this.isLoading = false;
         },
         error: (err) => {
           console.error(err);
@@ -105,6 +107,7 @@ export class AuthFormComponent implements OnInit {
         },
         complete: () => {
           console.log('completed');
+          this.isLoading = false;
         },
       });
      } else if(this.isInvitingUser){
@@ -113,6 +116,7 @@ export class AuthFormComponent implements OnInit {
         next: (res) => {
           console.log('User invited successfully:', res);
           this.snackbar.show(res.message, "success");
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Error inviting user:', err);
@@ -120,6 +124,7 @@ export class AuthFormComponent implements OnInit {
         },
         complete: () => {
           console.log('Invite user action completed.');
+          this.isLoading = false;
         }
       })
      }else {
@@ -128,11 +133,13 @@ export class AuthFormComponent implements OnInit {
         
           this.CookieService.set('token', res.token)
           this.CookieService.set('email', res.email)
-          this.router.navigate(['/homepage']);
+          this.router.navigate(['/homepage'])
+          this.isLoading = false;
         },
         error: (err: any) => console.error('Login Error:', err),
         complete: () => {
           console.log('completed');
+          this.isLoading = false;
         },
       });
     }

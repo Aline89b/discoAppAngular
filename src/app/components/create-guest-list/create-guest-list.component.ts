@@ -108,7 +108,7 @@ getGuests(){
     })
   }else if (this.guestForm.valid && !this.listId) {
       
-    const token = this.cookie.get('token'); // Or any storage method you use
+    const token = this.cookie.get('token'); 
     console.log(token)
     const decodedToken:decodedToken = jwtDecode(token)
     console.log(decodedToken.userId)

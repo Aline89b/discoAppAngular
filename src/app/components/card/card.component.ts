@@ -19,6 +19,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { baseUrl } from '../../../url';
 import { User } from '../../../models/user';
 import { SearchService } from '../../../services/search.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 
 
@@ -56,6 +57,7 @@ isLoading:boolean = true
 http = inject(HttpClient)
 editService = inject(EditService)
 route = inject(ActivatedRoute)
+snackbar = inject(SnackbarService)
 searchService = inject(SearchService)
   constructor(private dataService: DataService) { 
    }
@@ -340,9 +342,12 @@ console.log(endpoint)
           this.isEditingMode = false;
           this.editedItemId.set(null);
           this.loadData(); 
+          this.isEditingMode = false
+    this.editedItemId.set(null) 
         },
         error: (err) => {
           console.error('Error updating element:', err);
+          this.snackbar.show(err.error.message, "error")
         },
       });
     } else if (this.dataType === 'event') {
@@ -354,13 +359,16 @@ console.log(endpoint)
           this.isEditingMode = false;
           this.editedItemId.set(null);
           this.loadData(); 
+          this.isEditingMode = false
+    this.editedItemId.set(null) 
         },
         error: (err) => {
           console.error('Error updating element:', err);
+          this.snackbar.show(err.error.message, "error")
         },
       });
     } else if (this.dataType === 'Company') {
-      endpoint = `http://localhost:3000/api/companies/${id}`;
+      endpoint = `${baseUrl}/api/companies/${id}`;
       console.log(payload)
     }
   

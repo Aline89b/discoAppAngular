@@ -171,9 +171,9 @@ const getListsById = async (req,res) =>{
   }
 
   const editList = async(req,res) =>{
-  
+  const {id} = req.params
         
-        const { id,name, event, guests } = req.body; 
+        const { name, event, guests } = req.body; 
     
         try {
            

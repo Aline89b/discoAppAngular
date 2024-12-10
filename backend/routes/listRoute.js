@@ -7,7 +7,7 @@ const {authorizeRole, authenticateUser }= require('../middlewares/roleAuth')
 
 router.post('/', authenticateUser,authorizeRole('PR','admin'), addList)
 router.get('/', authenticateUser,authorizeRole('admin'),getLists)
-router.delete('/:id', authenticateUser,authorizeRole('PR'), deleteList)
+router.delete('/:id', authenticateUser,authorizeRole('PR','admin'), deleteList)
 router.delete('/:listId/:guestId',authenticateUser,authorizeRole('PR','admin'), deleteGuest)
 router.post('/:id/guests',authenticateUser, authorizeRole('PR','admin'), addGuest)
 router.get('/:id',getListsById)

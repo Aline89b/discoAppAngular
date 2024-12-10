@@ -1,5 +1,6 @@
 const { localeSchema } = require("../middlewares/validators");
 const Locale = require("../models/locale.model")
+const mongoose = require('mongoose')
 
 const getLocali = async(req,res) => {
     
