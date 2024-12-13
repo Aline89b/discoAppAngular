@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, ElementRef, inject, input, OnInit, QueryList, signal, ViewChildren, } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, input, OnInit, QueryList, signal, ViewChildren, } from '@angular/core';
 import { GuestList } from '../../../models/lista';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { Router, RouterLink } from '@angular/router';
@@ -19,7 +19,7 @@ import { baseUrl } from '../../../url';
 })
 
 
-export class GuestListComponent implements OnInit {
+export class GuestListComponent implements OnInit, AfterViewInit {
   http = inject(HttpClient)
   snackbar = inject(SnackbarService)
   lists  = signal<GuestList[]>([])
@@ -45,12 +45,18 @@ export class GuestListComponent implements OnInit {
     console.log(listId,guestId)
     this.guestId= guestId
     this.listId = listId
-    if(listId && guestId) {
-      this.scrollToList(listId)
-    }
+    
    this.getLists()
 
 
+}
+
+ngAfterViewInit(): void {
+  console.log(this.listElements)
+  if(this.listId && this.guestId) {
+      
+    this.scrollToList(this.listId)
+  }
 }
 getLists(){
   this.http.get( `${baseUrl}/api/lists`).subscribe({
@@ -220,7 +226,7 @@ save(){
 
 scrollToList(listId: string) {
   this.highlightedId = listId;
-  const element = this.listElements.find(el => el.nativeElement.id === listId)?.nativeElement;
+  const element = this.listElements.find(el => el.nativeElement._id === listId)?.nativeElement;
   if (element) {
     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(() => {

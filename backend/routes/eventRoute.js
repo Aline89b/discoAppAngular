@@ -6,7 +6,7 @@ const {authorizeRole,authenticateUser} = require('../middlewares/roleAuth')
 
 
 router.post('/',authenticateUser,authorizeRole('Admin','Manager','staff'), addEvent)
-router.get('/',authenticateUser,authorizeRole('Admin'), getEvents)
+router.get('/',authenticateUser,authorizeRole('Admin', 'Manager'), getEvents)
 router.get('/byCompany', getEventsByCompany)
 router.delete('/:id',authenticateUser,authorizeRole('Admin','Manager'), deleteEvent)
 router.get('/byLocale', getEventsByLocale)

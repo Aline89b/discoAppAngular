@@ -1,9 +1,9 @@
 <div
   class="flex h-screen items-center justify-center overflow-auto max-w-screen flex-wrap bg-gray-100 p-4"
 >
-<zxing-scanner [enable]="scannerEnabled" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+<zxing-scanner  *ngIf="scannerEnabled" [enable]="scannerEnabled" (scanSuccess)="onCodeResult($event)" ></zxing-scanner>
 
-<div class="card bg-base-100 w-1/2 top-0 bottom-0 m-auto shadow-xl" [ngClass]="qrResultParsed.status === 'invited' ? 'bg-green-600' : 'bg-red-600'" *ngIf="!scannerEnabled">
+<div class="card bg-base-100 w-full sm:w-1/2 m-auto shadow-xl" [ngClass]="qrResultParsed.status === 'invited' ? 'bg-green-600' : 'bg-red-600'" *ngIf="!scannerEnabled">
   <div class="card-body">
    
     <strong>{{ guest.name }} {{ guest.surname }}</strong>

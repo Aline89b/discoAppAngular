@@ -1,25 +1,27 @@
+<div *ngIf="isLoading">
+  Loading data...
+</div>
+
 <app-card
   *ngIf="dataType === 'locale'"
-  dataType="locale"
- >
-</app-card>
+  [dataType]="dataType"
+  [item]="item"
+></app-card>
+
 <app-card
   *ngIf="dataType === 'event'"
-  dataType="event"
- >
-</app-card>
+  [dataType]="dataType"
+  [item]="item"
+></app-card>
 
 <app-card
   *ngIf="dataType === 'Company'"
-  dataType="Company"
- >
-</app-card>
+  [dataType]="dataType"
+  [item]="item"
+></app-card>
+
 <app-card
   *ngIf="dataType === 'User'"
-  dataType="User"
- >
-</app-card>
-
-<div *ngIf="!dataType">
-  Loading data...
-</div>
+  [dataType]="dataType"
+  [item]="item"
+></app-card>

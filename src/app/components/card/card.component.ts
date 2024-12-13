@@ -36,7 +36,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
 export class CardComponent implements OnInit {
 
   @Input() dataType:'List' | 'Company' | 'User' | 'locale' | 'event'= 'locale';
-   item:any
+   @Input() item:any
    places = this.dataService.places
    events = this.dataService.events;
    companies = this.dataService.companies

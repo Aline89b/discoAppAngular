@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 
 
 import { CardComponent } from '../card/card.component';
@@ -15,7 +15,8 @@ import { SearchService } from '../../../services/search.service';
 })
 export class SearchDetailComponent implements OnInit {
   dataType: 'List' | 'Company' | 'User' | 'locale' | 'event'= 'locale';
-  
+ item: any = {};
+  isLoading:boolean = true
   searchService = inject(SearchService)
   route = inject(ActivatedRoute)
   constructor(){}
@@ -41,6 +42,7 @@ getItemDetails(id:string){
     }else{
       this.dataType = 'List'
     }
+    this.isLoading = false;
   })
 }
 }
