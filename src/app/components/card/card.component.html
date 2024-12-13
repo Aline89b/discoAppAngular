@@ -1,5 +1,5 @@
 <div
-  class="flex h-[calc(100vh-8rem)] items-center justify-center overflow-auto top-4 max-w-screen flex-wrap bg-gray-100 p-2"
+  class="flex h-[calc(100vh-8rem)] items-center justify-center overflow-auto top-4 max-w-screen flex-wrap bg-[#001F54] p-2"
 >
 <div *ngIf="isLoading" class="flex justify-center">
   <span class="loading loading-dots loading-lg"></span>
@@ -575,7 +575,7 @@
 
 </div>
 <div *ngIf="item && dataType === 'event'">
-  <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
+  <div class="p-4 rounded-lg shadow-md w-full max-w-fit top-2"
   [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== item._id }"
   
 >
@@ -739,7 +739,7 @@
 
 <div *ngIf="item && dataType === 'Company'">
   <div
-  class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%]"
+  class="bg-white p-4 rounded-lg shadow-md w-full max-w-fit top-2"
  >
   <div class="flex justify-between">
     <div class="card-actions">

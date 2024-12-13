@@ -5,8 +5,8 @@
 </div>
 
 <div *ngIf="!lists().length">
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
-  <div class="card bg-white p-6 rounded-lg shadow-md w-full max-w-md  flex flex-col gap-2 items-center">
+  <div class="flex items-center justify-center min-h-screen bg-[#001F54]">
+  <div class="card bg-white p-6 rounded-lg shadow-md w-full max-w-fit  flex flex-col gap-2 items-center">
     <div class="card-title">no lists in the page. </div>
     <a routerLink="/create-guest-list" class="btn btn-success">create a guest list now</a>
   </div>
@@ -15,11 +15,14 @@
 
 
 <div
-  class="flex h-[calc(100vh-8rem)] items-center justify-center overflow-auto max-w-screen flex-wrap bg-gray-100 p-4"
+  class="flex h-[calc(100vh-10rem)] items-center justify-center overflow-auto max-w-screen flex-wrap bg-gray-100 p-4"
 >
   <div
   [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== list._id }"
-    *ngFor="let list of lists(); let index = index; trackBy: trackByList" 
+    *ngFor="let list of lists(); let index = index; trackBy: trackByList"
+    #listElement
+    [id] = "list._id"
+    [ngClass]="{ 'highlight': highlightedId === list._id }" 
     class="bg-white p-6 rounded-lg shadow-md w-full max-w-fit flex-1 m-4 flex-wrap"
     
   >

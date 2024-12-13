@@ -118,7 +118,7 @@ const inviteUser = async (req, res) => {
      <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode} `,
     });
     user.verificationCode = verificationCode;
-    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; // Code expires in 10 minutes
+    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
     await user.save();
     res
       .status(200)
@@ -140,13 +140,11 @@ const logIn = async (req, res) => {
       console.log(user.email);
     }
 
-    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate the JWT token
     const token = jwt.sign(
       {
         userId: user._id,
@@ -199,10 +197,10 @@ const verifyUser = async (req, res) => {
     if (user.token === token) {
       await User.updateOne({ _id: id }, { $set: { verified: true } });
       //await Token.findByIdAndRemove(token._id);
-      return res.redirect("http://localhost:4200/verify?status=success");
+      return res.redirect("https://disco-app-angular.vercel.app/verify?status=success");
     }
   } catch (error) {
-    res.redirect("http://localhost:4200/verify?status=error");
+    res.redirect("https://disco-app-angular.vercel.app/verify?status=error");
   }
 };
 
@@ -229,17 +227,18 @@ const resetPWrequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     const userId = user._id;
-    const linkResetPW = `http://localhost:4200/resetPW/${userId}`;
+    const linkResetPW = `https://disco-app-angular.vercel.app/resetPW/${userId}`;
     const verificationCode = crypto.randomInt(100000, 999999).toString();
     await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
       subject: "reset password",
       html: `<p>copy the code below and paste it in verification code input to reset your password:</p>
-     <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode} `,
+     <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode}.
+     This code will expire in 10 minutes. `,
     });
     user.verificationCode = verificationCode;
-    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; // Code expires in 10 minutes
+    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
     await user.save();
     res
       .status(200)

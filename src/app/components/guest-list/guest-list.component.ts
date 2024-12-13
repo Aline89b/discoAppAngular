@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, inject, input, OnInit, signal, } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, OnInit, QueryList, signal, ViewChildren, } from '@angular/core';
 import { GuestList } from '../../../models/lista';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { Router, RouterLink } from '@angular/router';
@@ -36,6 +36,8 @@ export class GuestListComponent implements OnInit {
   listId!:string
   guestId!:string
   isLoading: boolean = true
+  highlightedId: string | null = null;
+  @ViewChildren('listElement') listElements!: QueryList<ElementRef>
   constructor() { }
 
   ngOnInit(): void {
@@ -217,10 +219,13 @@ save(){
 
 
 scrollToList(listId: string) {
-  const listElement = document.getElementById(listId);
-  if (listElement) {
-    listElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    listElement.classList.add('highlight');
+  this.highlightedId = listId;
+  const element = this.listElements.find(el => el.nativeElement.id === listId)?.nativeElement;
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      this.highlightedId = null;
+    }, 2000);
   }
 }
 

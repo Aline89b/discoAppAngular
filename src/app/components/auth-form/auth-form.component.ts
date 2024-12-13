@@ -24,7 +24,7 @@ export class AuthFormComponent implements OnInit {
   isSignUp: boolean = false;
   isInvitingUser: boolean = false;
   CookieService = inject(CookieService);
-  isLoading:boolean = true;
+  isLoading:boolean = false;
   roles: Array<{ value: string; label: string }> = [
     { value: 'admin', label: 'admin' },
     { value: 'manager', label: 'manager' },
@@ -88,10 +88,10 @@ export class AuthFormComponent implements OnInit {
 
   }
 
-  // Handle form submission
+
   onSubmit() {
     if (this.authForm.invalid) return;
-
+this.isLoading = true
     const {name, email, password, role } = this.authForm.value;
 
         if (this.isSignUp) {
@@ -128,6 +128,7 @@ export class AuthFormComponent implements OnInit {
         }
       })
      }else {
+
       this.auth.logIn(email, password).subscribe({
         next: (res: any) => {
         
@@ -136,7 +137,10 @@ export class AuthFormComponent implements OnInit {
           this.router.navigate(['/homepage'])
           this.isLoading = false;
         },
-        error: (err: any) => console.error('Login Error:', err),
+        error: (err: any) => {
+          console.error('Login Error:', err)
+          this.snackbar.show(err.error.message, "error")
+        },
         complete: () => {
           console.log('completed');
           this.isLoading = false;

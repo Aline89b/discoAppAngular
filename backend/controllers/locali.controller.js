@@ -90,7 +90,7 @@ const editPlace = async(req, res) => {
   console.log(localeData)
 
   try {
-    const EditedPlace = await Event.findByIdAndUpdate(
+    const EditedPlace = await Locale.findByIdAndUpdate(
       {_id: new mongoose.Types.ObjectId(`${id}`)},
       localeData,
       {new:true} 
