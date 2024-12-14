@@ -38,8 +38,8 @@ private usersSignal = signal<User[]>([])
     });
   }
 
-  fetchPlacesById(id:string): void {
-    this.http.get<locale[]>(`${this.localeUrl}/byUser/${id}`).subscribe((placeData) => {
+  fetchPlacesByCompany(): void {
+    this.http.get<locale[]>(`${this.localeUrl}/byCompany`).subscribe((placeData) => {
       this.placesSignal.set(placeData);
       console.log(placeData)
     });
@@ -51,8 +51,8 @@ private usersSignal = signal<User[]>([])
       console.log(eventsData)
     });
   }
-  fetchEventsById(id:string): void {
-    this.http.get<event[]>(`${this.eventUrl}/${id}`).subscribe((eventsData) => {
+  fetchEventsByCompany(): void {
+    this.http.get<event[]>(`${this.eventUrl}/byCompany `).subscribe((eventsData) => {
       this.eventsSignal.set(eventsData);
       console.log(eventsData)
     });

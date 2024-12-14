@@ -17,6 +17,7 @@ import { CreateGuestListComponent } from './components/create-guest-list/create-
 import { QrcodeComponent } from './components/qrcode/qrcode.component';
 import { ScanComponent } from './components/scan/scan.component';
 import { SearchDetailComponent } from './components/search-detail/search-detail.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
   
@@ -27,22 +28,23 @@ export const routes: Routes = [
   { path: 'verify', component: VerifyComponent },
   { path: 'resetPW/:id', component: ResetPWComponent },
   { path: 'resetPWrequest', component: ResetPWComponent },
+  { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'page404', component: Page404Component },
   { path: 'qrcodes/:listId/:guestId', component: QrcodeComponent },
   { path: 'searchDetail/:id', component: SearchDetailComponent,runGuardsAndResolvers: 'paramsChange' },
   { path: 'invite-user', component: AuthFormComponent, canActivate: [authGuard],
     data: { roles: ['admin'] }, },
     { path: 'create-locale', component: CreateLocaleComponent, canActivate: [authGuard],
-      data: { roles: ['admin','Manager'] }, },
+      data: { roles: ['admin','manager'] }, },
     { path: 'create-company', component: CreateCompanyComponent, canActivate: [authGuard],
-        data: { roles: ['admin','Manager'] }, },
+        data: { roles: ['admin','manager'] }, },
         { path: 'create-event', component: CreateEventComponent, canActivate: [authGuard],
-          data: { roles: ['admin','Manager'] }, },
+          data: { roles: ['admin','manager'] }, },
           { path: 'profile', component: ProfileComponent },
             { path: 'locals-list', component: LocalsListComponent },
               { path: 'events-list', component: EventsListComponent },
                 { path: 'create-guest-list', component: CreateGuestListComponent, canActivate: [authGuard],
-                  data: { roles: ['admin','Manager','PR'] }, },
+                  data: { roles: ['admin','manager','PR'] }, },
                   { path: 'guest-list', component: GuestListComponent },
                     { path: 'scan', component: ScanComponent },
 

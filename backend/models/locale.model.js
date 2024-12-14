@@ -13,6 +13,9 @@ const localeSchema = mongoose.Schema({
     capacity:{type: Number, required:true},
     eventId:{type: String},
     userId:{type: String},
+    companyId:{type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company', 
+        required: true},
     timestamp:{
         type:Date,
         default:Date.now

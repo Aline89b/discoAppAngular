@@ -90,7 +90,22 @@ const inviteUser = async (req, res) => {
         .status(401)
         .json({ success: false, message: error.details[0].message });
     }
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'Authorization token required' });
+    }
 
+   
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); 
+
+    const userID = decoded.userId;
+    const userManager = await User.findById(userID);
+    console.log('userId:',userId)
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const companyId = userManager.companyId; 
     const ExistingUser = await User.findOne({ email });
     if (ExistingUser) {
       return res
@@ -104,6 +119,7 @@ const inviteUser = async (req, res) => {
       role,
       email,
       password: hashedPassword,
+      companyId
     });
 
     console.log(user);

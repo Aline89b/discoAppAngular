@@ -1,6 +1,7 @@
 const { localeSchema } = require("../middlewares/validators");
 const Locale = require("../models/locale.model")
 const mongoose = require('mongoose')
+const User = require('../models/users.model');
 
 const getLocali = async(req,res) => {
     
@@ -32,8 +33,15 @@ const createLocale = async(req,res)=>{
             .status(401)
             .json({ success: false, message: "locale already exists" });
         }
+        const user = await User.findById({_id:new mongoose.Types.ObjectId(`${userId}`)});
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
 
-       const locale = await Locale.create({ name, address, city,zipCode,capacity,userId})
+       
+        const { companyId } = user;
+
+       const locale = await Locale.create({ name, address, city,zipCode,capacity,userId,companyId})
        console.log(locale)
        res.status(201).json({message:'locale has been saved'})
         
@@ -102,4 +110,37 @@ const editPlace = async(req, res) => {
   }
 }
 
-module.exports= {createLocale,getLocali, deleteLocale, getLocaleListById, getPlaceById, editPlace}
+const getPlacesByCompany = async(req,res)=>{
+  try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        return res.status(401).json({ error: 'Authorization token required' });
+      }
+  
+     
+      const decoded = jwt.verify(token, process.env.JWT_SECRET); 
+  
+      const userId = decoded.userId;
+      const user = await User.findById(userId);
+      console.log('userId:',userId)
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const companyId = user.companyId; 
+      console.log('companyId:',companyId)
+      if (!companyId) {
+        return res.status(400).json({ error: 'User has no associated company' });
+      }
+  
+    
+      const places = await Locale.find({ companyId: companyId });
+      console.log(places)
+      res.status(200).json(places);
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+}
+
+
+module.exports= {createLocale,getLocali, deleteLocale, getLocaleListById, getPlaceById, editPlace,getPlacesByCompany}

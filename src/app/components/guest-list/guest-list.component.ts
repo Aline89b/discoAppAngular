@@ -226,7 +226,7 @@ save(){
 
 scrollToList(listId: string) {
   this.highlightedId = listId;
-  const element = this.listElements.find(el => el.nativeElement._id === listId)?.nativeElement;
+  const element = this.listElements.find(el => el.nativeElement.getAttribute('_id') === listId)?.nativeElement;
   if (element) {
     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(() => {

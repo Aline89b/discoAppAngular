@@ -143,14 +143,14 @@ loadData(){
 loadDataById(id:string){
   if (this.dataType === 'locale'){
   
-    this.dataService.fetchPlacesById(id);
+    this.dataService.fetchPlacesByCompany();
     
   }else if(this.dataType === 'Company'){
     
     this.dataService.fetchCompaniesById(id);
   }else if(this.dataType === 'event'){
 
-    this.dataService.fetchEventsById(id);
+    this.dataService.fetchEventsByCompany();
   }else if(this.dataType === 'User'){
 
     this.dataService.fetchUserById(id);
