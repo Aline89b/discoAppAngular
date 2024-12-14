@@ -112,33 +112,35 @@ const editPlace = async(req, res) => {
 
 const getPlacesByCompany = async(req,res)=>{
   try {
-      const token = req.headers.authorization?.split(' ')[1];
-      if (!token) {
-        return res.status(401).json({ error: 'Authorization token required' });
-      }
-  
-     
-      const decoded = jwt.verify(token, process.env.JWT_SECRET); 
-  
-      const userId = decoded.userId;
-      const user = await User.findById(userId);
-      console.log('userId:',userId)
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
-      const companyId = user.companyId; 
-      console.log('companyId:',companyId)
-      if (!companyId) {
-        return res.status(400).json({ error: 'User has no associated company' });
-      }
-  
-    
-      const places = await Locale.find({ companyId: companyId });
-      console.log(places)
-      res.status(200).json(places);
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'Authorization token required' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const companyId = user.companyId;
+    if (!companyId) {
+      return res.status(400).json({ error: 'User has no associated company' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      return res.status(400).json({ error: 'Invalid company ID' });
+    }
+
+    const objectIdCompanyId = mongoose.Types.ObjectId(companyId);
+
+    const places = await Locale.find({ companyId: objectIdCompanyId });
+    res.status(200).json(places);
   } catch (error) {
-      res.status(500).json({message: error.message})
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 }
 
