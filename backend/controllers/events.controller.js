@@ -25,7 +25,7 @@ const getEventsByCompany = async(req,res)=>{
     
         const userId = decoded.userId;
         const user = await User.findById(userId);
-        console.log('userId:',userId)
+        
         if (!user) {
           return res.status(404).json({ error: 'User not found' });
         }
@@ -104,7 +104,7 @@ const addEvent = async (req,res) =>{
 const deleteEvent = async (req, res) => {
     try {
       const { id } = req.params;
-      console.log(id)
+      
       const event = await Event.findByIdAndDelete(id);
      
       if (!event) {
@@ -130,7 +130,7 @@ const { locale } = eventData
 }
 const getEventById = async(req, res) =>{
 const {id} = req.params  
-console.log(id)
+
     try {
       const event = await Event.findOne({_id: new mongoose.Types.ObjectId(`${id}`)})
       console.log(event)

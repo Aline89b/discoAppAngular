@@ -123,13 +123,13 @@ const getPlacesByCompany = async(req,res)=>{
   
       const userId = decoded.userId;
       const user = await User.findById(userId);
-      console.log('userId:',userId)
+   
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
   
       const companyId = user.companyId; 
-      console.log('companyId:',companyId)
+      
       if (!companyId) {
         return res.status(400).json({ error: 'User has no associated company' });
       }
