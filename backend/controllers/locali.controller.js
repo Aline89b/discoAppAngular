@@ -2,6 +2,7 @@ const { localeSchema } = require("../middlewares/validators");
 const Locale = require("../models/locale.model")
 const mongoose = require('mongoose')
 const User = require('../models/users.model');
+const jwt = require('jsonwebtoken');
 
 const getLocali = async(req,res) => {
     
