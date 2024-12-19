@@ -197,3 +197,172 @@
 
 
 
+<div *ngIf="item" class="flex flex-col gap-2 items-center ">
+  <h2 class="card-title">
+    <div *ngIf="!isEditing && editedItemId() !== item._id">{{ item.name }}</div>
+    <div   *ngIf="isEditing && editedItemId() === item._id">
+      <input
+      [formControl]="getFormControl(getFormGroupAt(0), 'name')"
+        (blur)="save()"
+        
+        type="text"
+      />
+    </div>
+  
+  </h2>
+
+ 
+  <div class="flex flex-wrap">
+    <div class="overflow-x-auto" >
+     
+      <table class="table-fixed max-w-md max-h-fit">
+         <thead>
+          <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>No of Friend</th>
+            <th>Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let guest of item.guests; let guestIndex = index; trackBy: trackByGuest">
+            <td class="block md:table-cell text-center" >
+              <div *ngIf="!isEditing || editedItemId() !== item._id">{{ guest.name }}</div>
+            <div  *ngIf="isEditing && editedItemId() === item._id">
+              <input
+              [formControl]="getGuestControl(-1,guestIndex,'name')"
+                (blur)="save()"
+                type="text"
+                class="w-full"
+              />
+            </div>
+            </td>
+            <td class=" text-center">
+              <div  *ngIf="!isEditing && editedItemId() !== item._id">{{ guest.surname }}</div>
+            <div  *ngIf="isEditing && editedItemId() === item._id">
+              <input
+              [formControl]="getGuestControl(-1, guestIndex, 'surname')"
+                (blur)="save()"
+                type="text"
+                class="w-full"
+              />
+            </div>
+            </td>
+            <td class=" text-center" >
+            <div *ngIf="!isEditing && editedItemId() !== item._id">{{ guest.noOfFriends }}</div>
+            <div *ngIf="isEditing && editedItemId() === item._id">
+            <input
+            [formControl]="getGuestControl(-1, guestIndex, 'noOfFriends')"
+              (blur)="save()"
+              type="number"
+              class="w-full"
+            />
+          </div>
+            </td>
+            <td class="text-center">
+              <div *ngIf="!isEditing && editedItemId() !== item._id ">
+                <a href="tel:{{ guest.phone }}">{{guest.phone}}</a>
+            </div>
+            <div *ngIf="isEditing && editedItemId() === item._id">
+              <input 
+              [formControl]="getGuestControl(-1, guestIndex, 'phone')"
+              (blur)="save()"
+              class="w-full"
+                type="tel" 
+                placeholder="Enter phone number" 
+              />
+            </div>
+            <td >
+              <button
+                class="btn-ghost"
+                (click)="sendCode(item._id, guest._id, guest.status, guest.phone)"
+              >
+                <svg
+                  class="w-6 h-6 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+                  />
+                </svg>
+              </button>
+            </td>
+            <td >
+              <button class="btn-ghost" (click)="deleteGuest(item._id, guest._id)">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  x="0px"
+                  y="0px"
+                  class="h-6 w-6"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"
+                  ></path>
+                </svg>
+              </button>
+            </td>
+            <td >
+              <button
+                class="btn-ghost"
+                (click)="addGuest(item.name, item.event.name, item._id)"
+              >
+                <svg
+                  class="w-6 h-6 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 12h14m-7 7V5"
+                  />
+                </svg>
+              </button>
+            </td>
+            <td *ngIf="listId && guestId">
+              <input (change)="onCheckboxChange($event)" type="checkbox" [checked]="false" class="checkbox checkbox-xs" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div *ngIf="!isEditing" class="card-actions justify-end mt-2">
+  <a  routerLink="/create-guest-list" class="btn btn-outline">Add List</a>
+  <button class="btn btn-outline" (click)="deleteList(item._id)">
+    Delete List
+  </button>
+  <button class="btn btn-outline" (click)="edit(item._id)">
+    Edit List
+  </button>
+
+</div>
+<div  class="card-actions justify-end mt-2">
+  <button *ngIf="isEditing && editedItemId() === item._id" class="btn btn-outline" (click)="save()">
+   Save 
+  </button>
+  <button *ngIf="isEditing && editedItemId() === item._id " class="btn btn-outline" (click)="cancel()">
+   cancel
+  </button>
+
+</div>
+
+
+

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateCardsDataService } from '../../../services/create-cards-data.service';
 
@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 import { decodedToken } from '../../../models/decodedToken';
 import { LocaleOption } from '../../../models/locale';
 import { baseUrl } from '../../../url';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -26,7 +27,7 @@ export class FormComponent implements OnInit {
   @Input() dataType: 'Company' | 'User' | 'Locale' | 'Event'='Company';
   @Input() initialData: any = {}; 
   form!: FormGroup;
-
+  router = inject(Router)
   filteredOptions: Observable<any[]> | undefined  
   options: any[] =[]
   
@@ -166,6 +167,8 @@ return this.http.get(`${baseUrl}/api/locali`).pipe(
           next: (res: any) => {
             console.log('Success:', res);
             this.snackbar.show(res.message,"success")
+            this.form.reset()
+            this.router.navigate(['/profile'])
           },
           error: (err) => {
             console.error(err);
@@ -180,6 +183,8 @@ return this.http.get(`${baseUrl}/api/locali`).pipe(
           next: (res: any) => {
             console.log('Success:', res);
             this.snackbar.show(res.message,"success")
+            this.form.reset()
+            this.router.navigate(['/locals-list'])
           },
           error: (err) => {
             console.error(err);
@@ -195,6 +200,8 @@ return this.http.get(`${baseUrl}/api/locali`).pipe(
           next: (res: any) => {
             console.log('Success:', res);
             this.snackbar.show(res.message,"success")
+            this.form.reset()
+            this.router.navigate(['/events-list'])
           },
           error: (err) => {
             console.error(err);

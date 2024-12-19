@@ -9,7 +9,7 @@ router.post('/',authenticateUser,authorizeRole('Admin','Manager','staff'), addEv
 router.get('/',authenticateUser,authorizeRole('Admin', 'Manager'), getEvents)
 router.get('/byCompany', getEventsByCompany)
 router.delete('/:id',authenticateUser,authorizeRole('Admin','Manager'), deleteEvent)
-router.get('/byLocale', getEventsByLocale)
+router.get('/:name', getEventsByLocale)
 router.get('/:id', getEventById)
 router.patch('/:id', editEvent)
 

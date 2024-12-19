@@ -3,7 +3,7 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 
 import { CardComponent } from '../card/card.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SearchService } from '../../../services/search.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class SearchDetailComponent implements OnInit {
   isLoading:boolean = true
   searchService = inject(SearchService)
   route = inject(ActivatedRoute)
+  router = inject(Router)
   constructor(){}
 ngOnInit(): void {
   this.route.params.subscribe(params => {
@@ -41,7 +42,9 @@ getItemDetails(id:string){
       this.dataType = 'User'
     }else{
       this.dataType = 'List'
+      this.router.navigate([`/guest-list/${id}`])
     }
+    
     this.isLoading = false;
   })
 }

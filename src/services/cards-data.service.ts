@@ -102,6 +102,10 @@ private usersSignal = signal<User[]>([])
     return this.http.get<event[]> ( `${this.eventUrl}/byCompany `)
   }
 
+  getEventsByPlace(name:string):Observable<event[]> {
+    return this.http.get<event[]> ( `${this.eventUrl}/${name} `)
+  }
+
   getCompanyById(endpoint:string,id:string): Observable<Company> {
     return this.http.get<Company> (`${endpoint}/${id}`)
   }

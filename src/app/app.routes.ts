@@ -18,6 +18,7 @@ import { QrcodeComponent } from './components/qrcode/qrcode.component';
 import { ScanComponent } from './components/scan/scan.component';
 import { SearchDetailComponent } from './components/search-detail/search-detail.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { EventsByPlaceComponent } from './components/events-by-place/events-by-place.component';
 
 export const routes: Routes = [
   
@@ -32,6 +33,8 @@ export const routes: Routes = [
   { path: 'page404', component: Page404Component },
   { path: 'qrcodes/:listId/:guestId', component: QrcodeComponent },
   { path: 'searchDetail/:id', component: SearchDetailComponent,runGuardsAndResolvers: 'paramsChange' },
+  { path: 'guest-list/:id', component: GuestListComponent,runGuardsAndResolvers: 'paramsChange' },
+  { path: 'events/:name', component: EventsByPlaceComponent,runGuardsAndResolvers: 'paramsChange' },
   { path: 'invite-user', component: AuthFormComponent, canActivate: [authGuard],
     data: { roles: ['admin'] }, },
     { path: 'create-locale', component: CreateLocaleComponent, canActivate: [authGuard],

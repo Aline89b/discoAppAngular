@@ -159,7 +159,7 @@
           <button
             *ngIf="!isEditingMode && editedItemId() !== place._id"
             class="btn btn-info"
-            (click)="save()"
+            (click)="getEventsByPlace(place.name)"
           >
             EVENTS
           </button>
@@ -564,7 +564,7 @@
           <button
             *ngIf="!isEditingMode && editedItemId() !== item._id"
             class="btn btn-info"
-            (click)="save()"
+            (click)="getEventsByPlace(item.name)"
           >
             EVENTS
           </button>

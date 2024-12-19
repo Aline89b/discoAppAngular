@@ -169,6 +169,19 @@ const getListsById = async (req,res) =>{
   }
   
   }
+  const getListById = async (req, res) => {
+    try {
+        const ID = req.params.id;
+        const list = await List.findById(id); 
+        if (!list) {
+            return res.status(404).json({ message: 'List not found' });
+        }
+        res.status(200).json(list);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
   const editList = async(req,res) =>{
   const {id} = req.params
@@ -199,4 +212,4 @@ const getListsById = async (req,res) =>{
     }
   }
 
-module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById, getGuestById,changeStatusGuest, editList }
+module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById,getListById, getGuestById,changeStatusGuest, editList }

@@ -46,6 +46,7 @@ onOptionSelected(option: Option) {
   this.searchControl.setValue(option.name); 
   this.router.navigate([`/searchDetail/${option.id}`])
   console.log(`/searchDetail/${option.id}`)
+  this.searchControl.reset()
 }
 
 

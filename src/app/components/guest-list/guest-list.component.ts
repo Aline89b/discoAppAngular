@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, effect, ElementRef, inject, input, OnInit, QueryList, signal, ViewChildren, } from '@angular/core';
 import { GuestList } from '../../../models/lista';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CreateCardsDataService } from '../../../services/create-cards-data.service';
 import { Guest } from '../../../models/guest';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -37,7 +37,18 @@ export class GuestListComponent implements OnInit, AfterViewInit {
   guestId!:string
   isLoading: boolean = true
   highlightedId: string | null = null;
+  route= inject(ActivatedRoute)
   @ViewChildren('listElement') listElements!: QueryList<ElementRef>
+  item: GuestList = {
+    _id: '',
+    name: '',
+    event: {
+      id: '',
+      name: ''
+    },
+    guests: [],
+    createdBy: ''
+  }
   constructor() { }
 
   ngOnInit(): void {
@@ -45,7 +56,16 @@ export class GuestListComponent implements OnInit, AfterViewInit {
     console.log(listId,guestId)
     this.guestId= guestId
     this.listId = listId
-    
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      this.http.get<GuestList> (`${baseUrl}/lists/${id}`).subscribe({
+        next: (res) => {
+          this.item = {...res}
+          console.log(this.item)
+        },
+        error: (err) => console.error('Error :', err)
+      });;
+    })
    this.getLists()
 
 
@@ -84,8 +104,19 @@ getGuestsFormArray(index: number): FormArray {
   return this.getFormGroupAt(index).get('guests') as FormArray;
 }
 getGuestControl(listIndex: number, guestIndex: number, controlName: string): FormControl {
+
+  if(listIndex === -1){
+    const guestControl = this.formArray.controls[guestIndex].get(controlName)
+    if (guestControl) {
+      return guestControl as FormControl;
+    }
+    throw new Error(`Guest control not found for field ${controlName}`);
+  } ;
   return this.getGuestsFormArray(listIndex).at(guestIndex).get(controlName) as FormControl;
-}
+
+  }
+
+  
 
 initFormArray(lists: GuestList[]): void {
   lists.forEach((list) => {
@@ -173,11 +204,11 @@ deleteList(id:string){
 }
 trackByList(index: number, item: GuestList):string {
   
-  return item._id; 
+  return item._id
 }
 trackByGuest(index: number, item: Guest):string {
 
-  return item._id; 
+  return `${item._id}-${index}` 
 }
 edit(id:string) {
   this.isEditing = true;

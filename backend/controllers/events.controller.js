@@ -119,10 +119,11 @@ const deleteEvent = async (req, res) => {
   
 const getEventsByLocale = async(req, res) =>{
 const {eventData} = req.body
-const { locale } = eventData
-
+const { name } = req.params
+console.log(name)
+console.log(eventData)
   try {
-    const events = await Event.findOne({locale})
+    const events = await Event.findOne({locale:name})
     res.status(200).json({message:'events found', events})
   } catch (error) {
     res.status(500).json({message: error.message})

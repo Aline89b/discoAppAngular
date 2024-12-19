@@ -9,13 +9,12 @@ import { FormComponent } from '../form/form.component';
 import { locale, LocaleOption } from '../../../models/locale';
 import { event } from '../../../models/event';
 import { Company } from '../../../models/company';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { map, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 import { EditService } from '../../../services/edit.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { baseUrl } from '../../../url';
 import { User } from '../../../models/user';
 import { SearchService } from '../../../services/search.service';
@@ -57,6 +56,7 @@ isLoading:boolean = true
 http = inject(HttpClient)
 editService = inject(EditService)
 route = inject(ActivatedRoute)
+router = inject(Router)
 snackbar = inject(SnackbarService)
 searchService = inject(SearchService)
   constructor(private dataService: DataService) { 
@@ -98,10 +98,15 @@ searchService = inject(SearchService)
        this.userId = decodedToken.userId
         this.route.params.subscribe(params => {
       const id = params['id'];
+      
       console.log(this.role)
       if(id){
+        this.places.set([])  
+        this.events.set([]) 
+        this.companies.set([]) 
+        this.users.set([]) 
         this.getItemDetails(id);
-        console.log(id)
+        
         this.isLoading = false
       }  else if (!id) {
         if (this.role === 'admin') {
@@ -201,15 +206,16 @@ getItemDetails(id:string){
     this.dataService.getUserById(endpoint,id).subscribe({
       next: (res) => {
         this.item =  {...res}
-        
-        
+      
       },
       error: (err) => console.error('Error :', err)
     });;
   }
 }
 
-
+getEventsByPlace(name:string){
+this.router.navigate([`events/${name}`])
+}
 deleteElement(id:string){
   let endpoint = '';
     if (this.dataType === 'locale') {
@@ -371,10 +377,8 @@ console.log(endpoint)
       endpoint = `${baseUrl}/api/companies/${id}`;
       console.log(payload)
     }
-  
-    
+   
   }
-
 
   cancel(){
     this.isEditingMode = false
