@@ -58,6 +58,7 @@ export class GuestListComponent implements OnInit, AfterViewInit {
     this.listId = listId
     this.route.params.subscribe(params => {
       const id = params['id'];
+      console.log(id)
       this.http.get<GuestList> (`${baseUrl}/lists/${id}`).subscribe({
         next: (res) => {
           this.item = {...res}

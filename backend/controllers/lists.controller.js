@@ -171,7 +171,7 @@ const getListsById = async (req,res) =>{
   }
   const getListById = async (req, res) => {
     try {
-        const ID = req.params.id;
+        const id = req.params.id;
         const list = await List.findById(id); 
         if (!list) {
             return res.status(404).json({ message: 'List not found' });
@@ -182,6 +182,7 @@ const getListsById = async (req,res) =>{
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 
   const editList = async(req,res) =>{
   const {id} = req.params

@@ -1,12 +1,13 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
 import { DataService } from '../../../services/cards-data.service';
 import { event } from '../../../models/event';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-events-by-place',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './events-by-place.component.html',
   styleUrl: './events-by-place.component.css'
 })
@@ -27,5 +28,13 @@ ngOnInit(): void {
     error:(err)=>console.error(err)
   })
 })
+}
+trackByEvent(index: number, item: any): string {
+  return item._id; // Use a unique identifier from your event model
+}
+
+viewEventDetails(event: any): void {
+  console.log('View event:', event);
+  // Add navigation or logic to show event details
 }
 }

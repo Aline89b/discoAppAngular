@@ -124,7 +124,7 @@ console.log(name)
 console.log(eventData)
   try {
     const events = await Event.findOne({locale:name})
-    res.status(200).json({message:'events found', events})
+    res.status(200).json(events)
   } catch (error) {
     res.status(500).json({message: error.message})
   }

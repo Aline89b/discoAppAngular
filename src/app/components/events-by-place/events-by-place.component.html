@@ -1,1 +1,24 @@
-<p>events-by-place works!</p>
+<div *ngIf="events && events.length > 0; else noEvents">
+    <h2 class="text-2xl font-bold mb-4">Events</h2>
+    <ul class="space-y-4">
+      <li *ngFor="let event of events; trackBy: trackByEvent">
+        <div class="p-4 border rounded-lg shadow-md bg-white">
+          <h3 class="text-xl font-semibold">{{ event.name }}</h3>
+          <p class="text-sm text-gray-600"><strong>Locale:</strong> {{ event.locale }}</p>
+          <p class="text-sm text-gray-600"><strong>Date:</strong> {{ event.date | date }}</p>
+          <p class="text-sm text-gray-600"><strong>Time:</strong> {{ event.time }}</p>
+          <p class="text-sm text-gray-600"><strong>Price:</strong> {{ event.price | currency }}</p>
+          <button 
+            class="mt-4 px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition"
+            (click)="viewEventDetails(event)">
+            View Details
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <ng-template #noEvents>
+    <p class="text-gray-500 text-center">No events found.</p>
+  </ng-template>
+  
