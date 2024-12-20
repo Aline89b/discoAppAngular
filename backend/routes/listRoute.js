@@ -11,7 +11,6 @@ router.delete('/:id', authenticateUser,authorizeRole('PR','admin','Manager'), de
 router.delete('/:listId/:guestId',authenticateUser,authorizeRole('PR','admin','Manager'), deleteGuest)
 router.post('/:id/guests',authenticateUser, authorizeRole('PR','admin','Manager'), addGuest)
 router.get('/:id',getListById)
-router.get('/:createdBy',getListsById)
 router.get('/:listId/:guestId',authenticateUser,authorizeRole('PR','admin','Manager'), getGuestById)
 router.patch('/:listId/:guestId', changeStatusGuest)
 router.patch('/:id', editList)

@@ -30,11 +30,7 @@ ngOnInit(): void {
 })
 }
 trackByEvent(index: number, item: any): string {
-  return item._id; // Use a unique identifier from your event model
+  return item._id; 
 }
 
-viewEventDetails(event: any): void {
-  console.log('View event:', event);
-  // Add navigation or logic to show event details
-}
 }

@@ -17,8 +17,18 @@ const searchRoute = require('./routes/searchRoute')
 const mongoose = require('mongoose')
 const User = require('./models/users.model')
 
+const isProd = process.env.NODE_ENV === 'production';
+const clientURL = isProd 
+    ? 'https://disco-app-angular.vercel.app' 
+    : 'http://localhost:4200';
+const backendURL = isProd 
+    ? 'https://discoappangular-1.onrender.com' 
+    : 'http://localhost:3000';
+
+
 app.use(cors({
-    origin: ['http://localhost:4200', 'https://disco-app-angular.vercel.app']
+    origin: [clientURL],
+    credentials: true
 }));
 app.use(helmet())
 app.use(cookieParser())
@@ -41,9 +51,9 @@ app.get("/", (req, res)=>{
     res.send("hello babe")
 })
 
-app.listen(process.env.PORT,()=> {
-    console.log("listening on port 3000")
-})
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`listening on port ${process.env.PORT || 3000}`);
+});
 
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{

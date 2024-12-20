@@ -8,11 +8,7 @@
           <p class="text-sm text-gray-600"><strong>Date:</strong> {{ event.date | date }}</p>
           <p class="text-sm text-gray-600"><strong>Time:</strong> {{ event.time }}</p>
           <p class="text-sm text-gray-600"><strong>Price:</strong> {{ event.price | currency }}</p>
-          <button 
-            class="mt-4 px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition"
-            (click)="viewEventDetails(event)">
-            View Details
-          </button>
+          
         </div>
       </li>
     </ul>

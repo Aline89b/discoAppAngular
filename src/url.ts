@@ -1,1 +1,5 @@
-export const baseUrl = 'https://discoappangular-1.onrender.com'
+import { environment } from "./environments/environment";
+
+
+
+export const baseUrl = environment.baseUrl;

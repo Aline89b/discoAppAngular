@@ -159,10 +159,13 @@ addGuest = async(req,res) =>{
 }
 const getListsById = async (req,res) =>{
 
-    const { createdBy } = req.params
+    const { createdBy } = req.query
     try{
    
-      const lists = await List.findById(createdBy)
+      const lists = await List.findById({createdBy})
+      if (!lists.length) {
+        return res.status(404).json({ message: 'No lists found for this user' });
+      }
       res.status(200).json(lists)
   }catch(error){
       res.status(500).json({message:error.message})
