@@ -118,12 +118,13 @@ const deleteEvent = async (req, res) => {
   };
   
 const getEventsByLocale = async(req, res) =>{
-const {eventData} = req.body
 const { name } = req.params
 console.log(name)
-console.log(eventData)
   try {
-    const events = await Event.findOne({locale:name})
+    const events = await Event.find({locale:name})
+    if (!events || events.length === 0) {
+      return res.status(404).json({ message: 'No events found for the specified locale' });
+    }
     res.status(200).json(events)
   } catch (error) {
     res.status(500).json({message: error.message})

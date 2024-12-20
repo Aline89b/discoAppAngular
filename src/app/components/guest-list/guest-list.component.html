@@ -17,7 +17,10 @@
 <div
   class="flex h-[calc(100vh-10rem)] items-center justify-center overflow-auto max-w-screen flex-wrap bg-[#001F54] p-4"
 >
+<div *ngIf="!id;else singleList">
   <div
+  
+    class="card bg-white p-6 rounded-lg shadow-md  max-w-fit flex-1 m-4 flex-wrap"
   [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== list._id }"
     *ngFor="let list of lists(); let index = index; trackBy: trackByList"
     #listElement
@@ -194,10 +197,14 @@
     </div>
   </div>
 </div>
+</div>
 
 
-
-<div *ngIf="item" class="flex flex-col gap-2 items-center ">
+<ng-template #singleList>
+  <div
+    class="card bg-white p-6 rounded-lg shadow-md  max-w-fit flex-1 m-4 flex-wrap">
+  
+<div class="flex flex-col gap-2 items-center ">
   <h2 class="card-title">
     <div *ngIf="!isEditing && editedItemId() !== item._id">{{ item.name }}</div>
     <div   *ngIf="isEditing && editedItemId() === item._id">
@@ -363,6 +370,7 @@
   </button>
 
 </div>
-
+</div>
+</ng-template>
 
 

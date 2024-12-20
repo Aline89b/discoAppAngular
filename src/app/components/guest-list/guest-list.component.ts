@@ -9,6 +9,10 @@ import { Guest } from '../../../models/guest';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditService } from '../../../services/edit.service';
 import { baseUrl } from '../../../url';
+import { CookieService } from 'ngx-cookie-service';
+import { jwtDecode } from 'jwt-decode';
+import { decodedToken } from '../../../models/decodedToken';
+import { DataService } from '../../../services/cards-data.service';
 
 @Component({
   selector: 'app-guest-list',
@@ -49,17 +53,27 @@ export class GuestListComponent implements OnInit, AfterViewInit {
     guests: [],
     createdBy: ''
   }
+  cookie = inject(CookieService)
+  role: string = ''
+  data = inject(DataService)
+  id =''
   constructor() { }
 
   ngOnInit(): void {
+      const token = this.cookie.get('token')
+       const decodedToken:decodedToken = jwtDecode(token)
+          
+           this.role= decodedToken.role
+      if (this.role !== 'admin') {
+        this.data.fetchListsByCompany()
+      }    
     const { listId, guestId } = history.state;
     console.log(listId,guestId)
     this.guestId= guestId
     this.listId = listId
     this.route.params.subscribe(params => {
-      const id = params['id'];
-      console.log(id)
-      this.http.get<GuestList> (`${baseUrl}/lists/${id}`).subscribe({
+      this.id = params['id'];
+      this.http.get<GuestList> (`${baseUrl}/api/lists/${this.id}`).subscribe({
         next: (res) => {
           this.item = {...res}
           console.log(this.item)

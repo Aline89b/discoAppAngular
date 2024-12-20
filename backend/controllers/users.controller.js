@@ -100,8 +100,8 @@ const inviteUser = async (req, res) => {
 
     const userID = decoded.userId;
     const userManager = await User.findById(userID);
-    console.log('userId:',userId)
-    if (!user) {
+    
+    if (!userManager) {
       return res.status(404).json({ error: 'User not found' });
     }
 
@@ -122,7 +122,6 @@ const inviteUser = async (req, res) => {
       companyId
     });
 
-    console.log(user);
     const userId = user._id;
     const linkResetPW = `disco-app-angular.vercel.app/resetPW/${userId}`;
     const verificationCode = crypto.randomInt(100000, 999999).toString();

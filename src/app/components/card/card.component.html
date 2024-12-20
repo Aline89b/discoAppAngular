@@ -16,7 +16,7 @@
       [ngClass]="{ 'hidden': editedItemId() !== null && editedItemId() !== place._id }"
       *ngFor="let place of places(); trackBy: trackByPlace"
     >
-      <form [formGroup]="placeForm">
+      <form [formGroup]="placeForm" class="h-full flex flex-col justify-between">
         <div class="flex justify-between">
           <div class="card-actions">
             <button (click)="editElement(place._id)" class="btn btn-circle">
@@ -141,7 +141,7 @@
             />
           </div>
         </div>
-        <div class="card-actions justify-end">
+        <div class="card-actions justify-end ">
           <button
             *ngIf="isEditingMode && editedItemId() === place._id"
             (click)="cancel()"
@@ -158,7 +158,7 @@
           </button>
           <button
             *ngIf="!isEditingMode && editedItemId() !== place._id"
-            class="btn btn-info"
+            class="btn btn-info "
             (click)="getEventsByPlace(place.name)"
           >
             EVENTS

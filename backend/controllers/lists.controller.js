@@ -174,7 +174,9 @@ const getListsById = async (req,res) =>{
   }
   const getListById = async (req, res) => {
     try {
-        const id = req.params.id;
+        const {id} = req.params;
+        
+        console.log(req.params)
         const list = await List.findById(id); 
         if (!list) {
             return res.status(404).json({ message: 'List not found' });
@@ -216,4 +218,35 @@ const getListsById = async (req,res) =>{
     }
   }
 
-module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById,getListById, getGuestById,changeStatusGuest, editList }
+  const getListsByCompany = async(req,res)=>{
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+          return res.status(401).json({ error: 'Authorization token required' });
+        }
+    
+       
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); 
+    
+        const userId = decoded.userId;
+        const user = await User.findById(userId);
+        
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+    
+        const companyId = user.companyId; 
+        if (!companyId) {
+          return res.status(400).json({ error: 'User has no associated company' });
+        }
+    
+      
+        const Lists = await List.find({ companyId: companyId });
+        
+        res.status(200).json(Lists);
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
+module.exports = { addList, getLists,deleteList, deleteGuest, addGuest,getListsById,getListById, getGuestById,changeStatusGuest, editList, getListsByCompany}

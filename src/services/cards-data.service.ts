@@ -7,6 +7,7 @@ import { Company } from '../models/company'
 import { Guest } from '../models/guest';
 import { baseUrl } from '../url';
 import { User } from '../models/user';
+import { GuestList } from '../models/lista';
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +23,7 @@ export class DataService {
   private placesSignal = signal<locale[]>([]);
   private eventsSignal = signal<event[]>([]);
   private companiesSignal = signal<Company[]>([]);
+  private listSignal = signal<GuestList[]>([]);
 private usersSignal = signal<User[]>([])
   constructor(private http: HttpClient) {}
 
@@ -42,6 +44,12 @@ private usersSignal = signal<User[]>([])
     this.http.get<locale[]>(`${this.localeUrl}/byCompany`).subscribe((placeData) => {
       this.placesSignal.set(placeData);
       console.log(placeData)
+    });
+  }
+  fetchListsByCompany(): void {
+    this.http.get<GuestList[]>(`${this.listUrl}/byCompany`).subscribe((listData) => {
+      this.listSignal.set(listData);
+      console.log(listData)
     });
   }
 

@@ -12,7 +12,7 @@ router.post('/logout', logOut)
 router.get('/verify/:id/:token', verifyUser)
 router.post('/resetPWrequest', resetPWrequest)
 router.patch('/resetPW/:id', resetPW)
-router.post('/invite-user',authorizeRole('manager'), inviteUser)
+router.post('/invite-user',authenticateUser,authorizeRole('manager','admin'), inviteUser)
 router.get('/:id', getUserById)
 
 
