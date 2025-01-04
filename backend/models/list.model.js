@@ -42,7 +42,7 @@ const listSchema = new Schema({
     ref: 'User',
     required: true,
   },
-  company: {
+  companyId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company', 
     required: true,

@@ -57,6 +57,8 @@ export class AutocompleteComponent implements OnInit {
         const options = results.map((result: any) => ({
           name: result.name,
           address: result.address,
+          email: result.email,
+          id: result._id,
         }));
         console.log('Transformed results:',options);
       },
@@ -89,11 +91,11 @@ export class AutocompleteComponent implements OnInit {
   
 
   toggleDropdown() {
-    this.isVisible = !this.isVisible; // Toggle dropdown visibility
+    this.isVisible = !this.isVisible; 
   }
   trackByFn(index: number, item: any): any {
     
-    return item.id || item.name || index; // Ensure a unique property is returned
+    return item.id || item.name || item.email || index 
   }
   
 

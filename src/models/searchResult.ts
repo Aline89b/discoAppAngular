@@ -9,5 +9,6 @@ export interface SearchResult {
 export interface Option {
     id: string,
     name: string,
+    email: string,
      
 }

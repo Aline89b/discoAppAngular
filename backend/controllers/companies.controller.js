@@ -12,7 +12,7 @@ const getCompanies = async(req, res)=>{
 }
 
 const getCompanyByOwnerId  = async(req, res) =>{
-    const { companyData } = req.body; // Extract `companyData` from `req.body`
+    const { companyData } = req.body; 
     if (!companyData) {
         return res.status(400).json({ message: 'Missing company data' });
     }
@@ -94,4 +94,23 @@ const deleteCompany = async (req, res) => {
     }
   };
 
-module.exports = {addCompany,getCompanies,getCompanyByOwnerId, deleteCompany}
+  const getCompanyById = async (req, res) => {
+    const { id } = req.params; 
+    if (!id) {
+        return res.status(400).json({ message: 'Company ID is required' });
+    }
+
+    try {
+        const company = await Company.findById(id);
+
+               if (!company) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
+
+        res.status(200).json(company);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = {addCompany,getCompanies,getCompanyByOwnerId, deleteCompany, getCompanyById}

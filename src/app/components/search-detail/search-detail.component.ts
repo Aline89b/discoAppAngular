@@ -14,38 +14,44 @@ import { SearchService } from '../../../services/search.service';
   styleUrl: './search-detail.component.css'
 })
 export class SearchDetailComponent implements OnInit {
-  dataType: 'List' | 'Company' | 'User' | 'locale' | 'event'= 'locale';
- item: any = {};
+  dataType: 'List' | 'Company' | 'User' | 'locale' | 'event'= 'User';
+  item: any = {};
   isLoading:boolean = true
   searchService = inject(SearchService)
   route = inject(ActivatedRoute)
   router = inject(Router)
   constructor(){}
 ngOnInit(): void {
+  console.log(this.dataType)
   this.route.params.subscribe(params => {
     const id = params['id'];
     if(id){
    this.getItemDetails(id!)
+   
     }
 })
 }
-getItemDetails(id:string){
-  this.searchService.getItemDetails(id).subscribe(item=>{
-   console.log(item)
-    if(item && item.time){
-      this.dataType = 'event'
-    }else if(item && item.PI){
-      this.dataType = 'Company'
-    }else if(item && item.capacity){
-      this.dataType = 'locale'
-    }else if(item && item.role){
-      this.dataType = 'User'
-    }else{
-      this.dataType = 'List'
-      this.router.navigate([`/guest-list/${id}`])
-    }
-    
-    this.isLoading = false;
-  })
+getItemDetails(id: string) {
+  this.searchService.getItemDetails(id).subscribe({
+    next: item => {
+      console.log('Fetched Item:', item);
+      console.log(this.dataType)
+      this.item = item;
+      if (item?.time) this.dataType = 'event';
+      else if (item?.PI) this.dataType = 'Company';
+      else if (item?.capacity) this.dataType = 'locale';
+      else if (item?.role) this.dataType = 'User';
+      else {
+        this.dataType = 'List';
+        this.router.navigate([`/guest-list/${id}`]);
+      }
+      console.log('Updated DataType:', this.dataType);
+      this.isLoading = false;
+    },
+    error: err => {
+      console.error('Error fetching item:', err);
+      this.isLoading = false;
+    },
+  });
 }
 }

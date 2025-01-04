@@ -138,4 +138,7 @@ private usersSignal = signal<User[]>([])
     return this.usersSignal
   }
   
+  get lists() {
+    return this.listSignal
+  }
 }

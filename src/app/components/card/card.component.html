@@ -788,22 +788,17 @@
   <p>🏙️ email: {{ item.email }}</p>
 </div>
 </div>
-</div>
+<div *ngIf="item && dataType === 'User' && !isEditingMode">
+  <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit">
 
-<div *ngIf="item && dataType === 'User'">
-  <div
-  class="bg-white p-6 rounded-lg shadow-md w-full max-w-md flex-[2_2_0%] flex-col items-center min-w-fit"
-
->
-  <div class="flex justify-between">
-    <div class="card-actions">
-      
-    <h2 class="card-title">{{ item.name }}</h2>
-    
-  </div>
-  <p>email: {{ item.email}}</p>
-  <p>role: {{ item.role }}</p>
+     
+    <h2 class="card-title">{{ item.name || 'no name added' }}</h2>
+   <p>email: {{ item.email}}</p>
+   <p>role: {{ item.role }}</p>
+   <p>verified: {{ item.verified ? 'Yes' : 'No' }}</p>
   
-  </div>
+ </div>
 </div>
 </div>
+
+

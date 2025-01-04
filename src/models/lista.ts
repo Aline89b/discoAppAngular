@@ -8,5 +8,5 @@ export interface GuestList {
       name: string
     } 
     guests: Guest[];
-    createdBy: string
+    createdBy: {name: string, id: string, email: string};
   }

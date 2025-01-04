@@ -24,9 +24,10 @@ import { DataService } from '../../../services/cards-data.service';
 
 
 export class GuestListComponent implements OnInit, AfterViewInit {
+  data = inject(DataService)
   http = inject(HttpClient)
   snackbar = inject(SnackbarService)
-  lists  = signal<GuestList[]>([])
+  lists = this.data.lists
   guests: Guest[] = []
   dataService = inject(CreateCardsDataService)
   router = inject(Router)
@@ -51,11 +52,11 @@ export class GuestListComponent implements OnInit, AfterViewInit {
       name: ''
     },
     guests: [],
-    createdBy: ''
+    createdBy: { name: '', id: '', email: '' }
   }
   cookie = inject(CookieService)
   role: string = ''
-  data = inject(DataService)
+  
   id =''
   constructor() { }
 
@@ -66,28 +67,31 @@ export class GuestListComponent implements OnInit, AfterViewInit {
            this.role= decodedToken.role
       if (this.role !== 'admin') {
         this.data.fetchListsByCompany()
+        this.isLoading = false
+      }else{
+        this.getLists()
       }    
     const { listId, guestId } = history.state;
     console.log(listId,guestId)
     this.guestId= guestId
     this.listId = listId
+     if(this.id){
     this.route.params.subscribe(params => {
       this.id = params['id'];
-      this.http.get<GuestList> (`${baseUrl}/api/lists/${this.id}`).subscribe({
-        next: (res) => {
-          this.item = {...res}
-          console.log(this.item)
-        },
-        error: (err) => console.error('Error :', err)
-      });;
-    })
-   this.getLists()
-
+     
+        this.http.get<GuestList> (`${baseUrl}/api/lists/${this.id}`).subscribe({
+          next: (res) => {
+            this.item = {...res}
+            console.log(this.item)
+          },
+          error: (err) => console.error('Error :', err)
+        });
+  
+    })}  
 
 }
 
 ngAfterViewInit(): void {
-  console.log(this.listElements)
   if(this.listId && this.guestId) {
       
     this.scrollToList(this.listId)
@@ -130,8 +134,6 @@ getGuestControl(listIndex: number, guestIndex: number, controlName: string): For
   return this.getGuestsFormArray(listIndex).at(guestIndex).get(controlName) as FormControl;
 
   }
-
-  
 
 initFormArray(lists: GuestList[]): void {
   lists.forEach((list) => {

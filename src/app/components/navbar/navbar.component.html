@@ -39,7 +39,7 @@
         <app-autocomplete
           [control]="searchControl"
           [fetchSuggestions]="fetchSuggestions"
-          [displayField]="'name'"
+          [displayField]="'name' || 'email'"
           placeholder="Search..."
           (optionSelected)="onOptionSelected($event)"
         ></app-autocomplete>

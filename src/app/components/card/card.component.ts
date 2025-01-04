@@ -34,12 +34,13 @@ import { SnackbarService } from '../../../services/snackbar.service';
 
 export class CardComponent implements OnInit {
 
-  @Input() dataType:'List' | 'Company' | 'User' | 'locale' | 'event'= 'locale';
+  @Input() dataType:'List' | 'Company' | 'User' | 'locale' | 'event'= 'User';
    @Input() item:any
    places = this.dataService.places
    events = this.dataService.events;
    companies = this.dataService.companies
   users = this.dataService.users
+  
 cdr= inject(ChangeDetectorRef)
   cookie =inject(CookieService)
   role = ''
@@ -62,7 +63,7 @@ searchService = inject(SearchService)
   constructor(private dataService: DataService) { 
    }
   ngOnInit(): void {
- 
+ console.log(this.dataType)
   if( this.dataType === 'locale'){
     console.log('fetchSuggestions passed to Autocomplete:', this.fetchAddressSuggestions);
     this.placeForm = new FormGroup({
@@ -206,7 +207,8 @@ getItemDetails(id:string){
     this.dataService.getUserById(endpoint,id).subscribe({
       next: (res) => {
         this.item =  {...res}
-      
+      console.log(this.item)
+      console.log(this.dataType)
       },
       error: (err) => console.error('Error :', err)
     });;

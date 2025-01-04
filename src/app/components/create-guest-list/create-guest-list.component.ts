@@ -7,6 +7,7 @@ import { CreateCardsDataService } from '../../../services/create-cards-data.serv
 import { jwtDecode } from 'jwt-decode';
 import { decodedToken } from '../../../models/decodedToken';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-guest-list',
   standalone: true,
@@ -20,7 +21,7 @@ export class CreateGuestListComponent implements OnInit {
   listName!: string; 
   eventDefined!: string; 
   listId!: string
-  constructor(private cookie: CookieService, public snackbar: SnackbarService, private dataService: DataService,private createDataService: CreateCardsDataService) { }
+  constructor(private cookie: CookieService, public snackbar: SnackbarService, private dataService: DataService,private createDataService: CreateCardsDataService,private router: Router) { }
 ngOnInit(): void {
   
   
@@ -100,6 +101,8 @@ getGuests(){
         next: (res: any) => {
           console.log('Success:', res);
           this.snackbar.show(res.message,"success")
+          this.guestForm.reset()
+          this.router.navigate(['/guest-list'])
         },
         error: (err) => {
           console.error(err);
@@ -109,7 +112,6 @@ getGuests(){
   }else if (this.guestForm.valid && !this.listId) {
       
     const token = this.cookie.get('token'); 
-    console.log(token)
     const decodedToken:decodedToken = jwtDecode(token)
     console.log(decodedToken.userId)
     guestsData.userId= decodedToken.userId
@@ -119,6 +121,7 @@ getGuests(){
       next: (res: any) => {
         console.log('Success:', res);
         this.snackbar.show(res.message,"success")
+    
       },
       error: (err) => {
         console.error(err);

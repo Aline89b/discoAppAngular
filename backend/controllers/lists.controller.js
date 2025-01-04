@@ -2,11 +2,13 @@ const {List, Guest} = require('../models/list.model');
 const qrcode = require('../models/qrcode.model');
 const User = require('../models/users.model')
 const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken");
 
 
 const getLists = async (req, res) =>{
     try {
-        const lists = await List.find().populate('guests').populate('event', 'name')
+        const lists = await List.find().populate('guests').populate('event', 'name').populate('createdBy', 'name email');
+       console.log(lists)
         res.status(200).json(lists)
     } catch (error) {
         res.status(500).json({message:error.message})
@@ -24,7 +26,7 @@ console.log(req.body)
         }
 
         const companyId = user.companyId;
-    const list = await List.create({name, surname, event, guests,noOfFriends,createdBy:userId, company: companyId })
+    const list = await List.create({name, surname, event, guests,noOfFriends,createdBy:userId, companyId: companyId })
         console.log(list)
     } catch (error) {
         res.status(500).json({message:error.message})

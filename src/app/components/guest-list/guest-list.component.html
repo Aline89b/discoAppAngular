@@ -31,7 +31,8 @@
   >
     <div class="flex flex-col gap-2 items-center ">
       <h2 class="card-title">
-        <div *ngIf="!isEditing && editedItemId() !== list._id">{{ list.name }}</div>
+        <div *ngIf="!isEditing && editedItemId() !== list._id">
+          {{ list.name }} di {{ list.createdBy?.name ? list.createdBy.name : list.createdBy?.email }} </div>
         <div   *ngIf="isEditing && editedItemId() === list._id">
           <input
           [formControl]="getFormControl(getFormGroupAt(index), 'name')"

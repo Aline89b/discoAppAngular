@@ -36,6 +36,8 @@ fetchSuggestions = (query: string): Observable<Option[]> => {
       results.map(result => ({
         name: result.name,
         id: result._id,
+        email: result.email,
+
       }))
     )
   );
@@ -43,7 +45,7 @@ fetchSuggestions = (query: string): Observable<Option[]> => {
 
 onOptionSelected(option: Option) {
   console.log(option.id)
-  this.searchControl.setValue(option.name); 
+  this.searchControl.setValue(option.name || option.email); 
   this.router.navigate([`/searchDetail/${option.id}`])
   console.log(`/searchDetail/${option.id}`)
   this.searchControl.reset()
