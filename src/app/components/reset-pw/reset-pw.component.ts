@@ -71,7 +71,7 @@ export class ResetPWComponent implements OnInit{
     this.checkPasswords();
     
     if (this.path === 'resetPW' && this.passwordForm.valid && !this.passwordMatchError) {
-      console.log('Form Submitted', this.passwordForm.value);
+     // console.log('Form Submitted', this.passwordForm.value);
       this.auth.resetPW(this.userId, password, verificationCode).subscribe({
         next: (res: any) => {
           console.log('Success:', res);

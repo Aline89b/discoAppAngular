@@ -24,7 +24,7 @@ export class AppComponent {
   shouldShowNav(): boolean {
     
     
-     if(this.router.url.includes('/login') || this.router.url.includes('/signup') ){
+     if(this.router.url.includes('/login') || this.router.url.includes('/signup') || this.router.url.includes('/resetPW') || this.router.url.includes('/resetPWrequest') || this.router.url.includes('/verify') || this.router.url.includes('/resetPW/:id')){
       return false
     }else{
       return true

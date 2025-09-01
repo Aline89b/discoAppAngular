@@ -51,16 +51,15 @@ app.get("/", (req, res)=>{
     res.send("hello babe")
 })
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`listening on port ${process.env.PORT || 3000}`);
-});
-
 mongoose.connect(process.env.MONGO_URI)
-.then(()=>{
-    console.log("connected to DB")
+.then(() => {
+    console.log("✅ Connected to DB");
+    app.listen(process.env.PORT || 3000, () => {
+        console.log(`🚀 Server running on port ${process.env.PORT || 3000}`);
+    });
 })
 .catch(()=>{
-    console.log("NOT CONNECTED TO DB")
+    console.error("NOT CONNECTED TO DB",err)
 })
 
 
