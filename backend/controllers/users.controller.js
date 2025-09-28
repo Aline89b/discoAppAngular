@@ -17,6 +17,7 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   const { role, email, password } = req.body;
+  console.log(role, email, password)
 
   try {
     const { error, value } = signUpSchema.validate({ role, email, password });
@@ -49,33 +50,30 @@ const addUser = async (req, res) => {
       }
     );
 
-    // ✅ RISPONDE SUBITO AL FRONTEND
-    res.status(200).json({
-      message: "Registration completed. Check your email for verification link",
-      role: user.role,
-      email: user.email,
-      token,
-    });
+    console.log(user);
 
-    // 📧 INVIO EMAIL IN BACKGROUND
     const verificationLink = `https://discoappangular-1.onrender.com/api/users/verify/${userId}/${token}`;
-    
-    transport.sendMail({
+    await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
       subject: "verify your email",
       html: `<p>Please click the link below to verify your email:</p>
-       <a href="${verificationLink}">Verify Email</a>`,
-    })
-    .then((info) => {
-      console.log('✅ Email sent to:', email);
-    })
-    .catch((error) => {
-      console.error('❌ Email failed for:', email, '-', error.message);
+     <a href="${verificationLink}">Verify Email</a>`,
     });
+    res
+      .status(200)
+      .json({
+        message:
+          "Verification email sent successfully, check your email please",
+        role: user.role,
+        email: user.email,
+        token,
+      });
+console.log(verificationLink);
 
   } catch (error) {
-    console.error('Registration error:', error.message);
+      console.error(" Errore durante il sign-up:", error);
+
     res.status(500).json({ message: error.message });
   }
 };
@@ -101,6 +99,7 @@ const inviteUser = async (req, res) => {
       return res.status(401).json({ error: 'Authorization token required' });
     }
 
+   
     const decoded = jwt.verify(token, process.env.JWT_SECRET); 
 
     const userID = decoded.userId;
@@ -130,37 +129,24 @@ const inviteUser = async (req, res) => {
     const userId = user._id;
     const linkResetPW = `disco-app-angular.vercel.app/resetPW/${userId}`;
     const verificationCode = crypto.randomInt(100000, 999999).toString();
-    
-    user.verificationCode = verificationCode;
-    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
-    await user.save();
-
-    // ✅ RISPONDE SUBITO AL FRONTEND
-    res.status(200).json({ 
-      success: true, 
-      message: `Invite sent to ${email}` 
-    });
-
-    // 📧 INVIO EMAIL INVITE IN BACKGROUND
-    transport.sendMail({
+    await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
       subject: "invite to registration on DiscoApp",
       html: `<p>copy the code below and paste it in verification code input to reset your password:</p>
-       <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode} `,
-    })
-    .then((info) => {
-      console.log('✅ Invite sent to:', email);
-    })
-    .catch((error) => {
-      console.error('❌ Invite failed for:', email, '-', error.message);
+     <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode} `,
     });
-
+    user.verificationCode = verificationCode;
+    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
+    await user.save();
+    res
+      .status(200)
+      .json({ success: true, message: `invite has been sent to ${email}` });
   } catch (error) {
-    console.error('Invite error:', error.message);
     res.status(500).json({ message: error.message });
   }
-};
+}
+
 
 const logIn = async (req, res) => {
   const { email, password } = req.body;
@@ -189,7 +175,7 @@ const logIn = async (req, res) => {
       { expiresIn: "12h" }
     );
 
-    console.log("✅ Token generato per login:", user.email);
+    console.log("Generated Token:", token, req.headers);
 
     if (!user.verified) {
       return res
@@ -253,46 +239,30 @@ const updatedUser = async (req, res) => {
 };
 
 const resetPWrequest = async (req, res) => {
-  const { email } = req.body;
-
   try {
+    const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
     const userId = user._id;
     const linkResetPW = `https://disco-app-angular.vercel.app/resetPW/${userId}`;
     const verificationCode = crypto.randomInt(100000, 999999).toString();
-    
-    user.verificationCode = verificationCode;
-    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
-    await user.save();
-
-    // ✅ RISPONDE SUBITO AL FRONTEND
-    res.status(200).json({ 
-      success: true, 
-      message: `Reset link sent to ${email}` 
-    });
-
-    // 📧 INVIO EMAIL RESET IN BACKGROUND
-    transport.sendMail({
+    await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
       subject: "reset password",
       html: `<p>copy the code below and paste it in verification code input to reset your password:</p>
-       <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode}.
-       This code will expire in 10 minutes. `,
-    })
-    .then((info) => {
-      console.log('✅ Reset email sent to:', email);
-    })
-    .catch((error) => {
-      console.error('❌ Reset email failed for:', email, '-', error.message);
+     <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode}.
+     This code will expire in 10 minutes. `,
     });
-
+    user.verificationCode = verificationCode;
+    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
+    await user.save();
+    res
+      .status(200)
+      .json({ success: true, message: `invite has been sent to ${email}` });
   } catch (error) {
-    console.error('Reset password error:', error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -338,7 +308,6 @@ const resetPW = async (req, res) => {
       .json({ message: "An error occurred while resetting password" });
   }
 };
-
 const getUserById = async(req,res) =>{
   const { id } = req.params;
   try {
@@ -347,8 +316,7 @@ const getUserById = async(req,res) =>{
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
-
+}
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;

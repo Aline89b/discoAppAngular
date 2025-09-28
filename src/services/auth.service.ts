@@ -19,11 +19,11 @@ userUrl = `${baseUrl}/api/users`
   constructor(private http: HttpClient,private cookie:CookieService) { }
 
   addUser(email: string, password: string, role:string): Observable<any>{
-    return this.http.post(this.userUrl, {email,password, role})
+    return this.http.post(this.userUrl, {email,password, role}, { withCredentials: true })
 
   }
   logIn(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.userUrl}/login`, { email, password });
+    return this.http.post(`${this.userUrl}/login`, { email, password }, { withCredentials: true });
   }
  
   resetPWrequest(email:string): Observable<any>{
