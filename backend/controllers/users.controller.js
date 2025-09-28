@@ -17,7 +17,6 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   const { role, email, password } = req.body;
-  console.log('🚀 INIZIO registrazione:', role, email);
 
   try {
     const { error, value } = signUpSchema.validate({ role, email, password });
@@ -50,21 +49,15 @@ const addUser = async (req, res) => {
       }
     );
 
-    console.log('👤 Utente creato:', user.email);
-
-    // ✅ RISPONDE SUBITO AL FRONTEND - Non aspetta l'email
+    // ✅ RISPONDE SUBITO AL FRONTEND
     res.status(200).json({
-      message: "Verification email sent successfully, check your email please",
+      message: "Registration completed. Check your email for verification link",
       role: user.role,
       email: user.email,
       token,
     });
-    
-    console.log('✅ Risposta inviata al frontend');
 
-    // 📧 INVIO EMAIL IN BACKGROUND - Non blocca la risposta
-    console.log('📧 Invio email di verifica in background...');
-    
+    // 📧 INVIO EMAIL IN BACKGROUND
     const verificationLink = `https://discoappangular-1.onrender.com/api/users/verify/${userId}/${token}`;
     
     transport.sendMail({
@@ -75,23 +68,20 @@ const addUser = async (req, res) => {
        <a href="${verificationLink}">Verify Email</a>`,
     })
     .then((info) => {
-      console.log('✅ Email di verifica inviata con successo:', info.messageId);
-      console.log('📧 Destinatario:', email);
+      console.log('✅ Email sent to:', email);
     })
     .catch((error) => {
-      console.error('❌ Errore invio email di verifica:', error.message);
-      console.error('📧 Email fallita per:', email);
+      console.error('❌ Email failed for:', email, '-', error.message);
     });
 
   } catch (error) {
-    console.error('❌ Errore durante registrazione:', error.message);
+    console.error('Registration error:', error.message);
     res.status(500).json({ message: error.message });
   }
 };
 
 const inviteUser = async (req, res) => {
   const { name, role, email, password } = req.body;
-  console.log('🚀 INIZIO invito utente:', email);
 
   try {
     const { error, value } = signUpSchema.validate({
@@ -145,19 +135,13 @@ const inviteUser = async (req, res) => {
     user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
     await user.save();
 
-    console.log('👤 Utente invitato creato:', user.email);
-
     // ✅ RISPONDE SUBITO AL FRONTEND
     res.status(200).json({ 
       success: true, 
-      message: `invite has been sent to ${email}` 
+      message: `Invite sent to ${email}` 
     });
 
-    console.log('✅ Risposta invite inviata al frontend');
-
     // 📧 INVIO EMAIL INVITE IN BACKGROUND
-    console.log('📧 Invio email di invito in background...');
-    
     transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
@@ -166,16 +150,14 @@ const inviteUser = async (req, res) => {
        <a href="${linkResetPW}">Go to the link</a> Verification code:${verificationCode} `,
     })
     .then((info) => {
-      console.log('✅ Email di invito inviata con successo:', info.messageId);
-      console.log('📧 Destinatario:', email);
+      console.log('✅ Invite sent to:', email);
     })
     .catch((error) => {
-      console.error('❌ Errore invio email di invito:', error.message);
-      console.error('📧 Email invite fallita per:', email);
+      console.error('❌ Invite failed for:', email, '-', error.message);
     });
 
   } catch (error) {
-    console.error('❌ Errore durante invito:', error.message);
+    console.error('Invite error:', error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -207,7 +189,7 @@ const logIn = async (req, res) => {
       { expiresIn: "12h" }
     );
 
-    console.log("Generated Token:", token, req.headers);
+    console.log("✅ Token generato per login:", user.email);
 
     if (!user.verified) {
       return res
@@ -272,7 +254,6 @@ const updatedUser = async (req, res) => {
 
 const resetPWrequest = async (req, res) => {
   const { email } = req.body;
-  console.log('🚀 INIZIO reset password per:', email);
 
   try {
     const user = await User.findOne({ email });
@@ -288,19 +269,13 @@ const resetPWrequest = async (req, res) => {
     user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; 
     await user.save();
 
-    console.log('👤 Codice reset generato per:', user.email);
-
     // ✅ RISPONDE SUBITO AL FRONTEND
     res.status(200).json({ 
       success: true, 
-      message: `Reset link has been sent to ${email}` 
+      message: `Reset link sent to ${email}` 
     });
 
-    console.log('✅ Risposta reset inviata al frontend');
-
     // 📧 INVIO EMAIL RESET IN BACKGROUND
-    console.log('📧 Invio email di reset in background...');
-    
     transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
@@ -310,16 +285,14 @@ const resetPWrequest = async (req, res) => {
        This code will expire in 10 minutes. `,
     })
     .then((info) => {
-      console.log('✅ Email di reset inviata con successo:', info.messageId);
-      console.log('📧 Destinatario:', email);
+      console.log('✅ Reset email sent to:', email);
     })
     .catch((error) => {
-      console.error('❌ Errore invio email di reset:', error.message);
-      console.error('📧 Email reset fallita per:', email);
+      console.error('❌ Reset email failed for:', email, '-', error.message);
     });
 
   } catch (error) {
-    console.error('❌ Errore durante reset password:', error.message);
+    console.error('Reset password error:', error.message);
     res.status(500).json({ message: error.message });
   }
 };
