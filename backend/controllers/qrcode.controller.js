@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const QRcode = require('qrcode')
 const qrcode = require('../models/qrcode.model')
+
+
 //const twilio = require('twilio')
 const accountSid = process.env.SID_ACCOUNT
 const authToken = process.env.TWILIO_TOKEN
@@ -48,7 +50,7 @@ const sendQRcode = async (req,res) => {
      } catch (error) {
         console.log(error.message, error.code)
      }
-          
+            
         const qrcodeNew = new qrcode({
             guestId,
             listId,
@@ -63,7 +65,7 @@ const sendQRcode = async (req,res) => {
     } catch (error) {
         console.log(error)
     }
-   
+ 
 }
 
 const getQRcode = async(req, res) =>{

@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ResetPWComponent implements OnInit{
   auth= inject(AuthService)
   path:string=''
   userId:string=''
-  constructor( private route: ActivatedRoute , private router: Router) {}
+  constructor( private route: ActivatedRoute , private router: Router, public snackbar: SnackbarService) {}
 
 
   ngOnInit(): void {
@@ -89,9 +90,11 @@ export class ResetPWComponent implements OnInit{
       this.auth.resetPWrequest(email).subscribe({
         next: (res: any) => {
           console.log('Success:', res);
+          this.snackbar.show(res.message,"success")
         },
         error: (err) => {
           console.error(err);
+          this.snackbar.show(err.error.message, "error")
         },
         complete: () => {
           console.log('completed');
