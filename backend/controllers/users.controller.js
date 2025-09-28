@@ -45,8 +45,9 @@ const addUser = async (req, res) => {
 
     user.token = token;
     await user.save();
-   /* const userId = user._id;
-    await User.findOneAndUpdate(
+    const userId = user._id;
+
+  /*  await User.findOneAndUpdate(
       { _id: userId },
       {
         $set: { token: token },
@@ -78,18 +79,16 @@ const addUser = async (req, res) => {
     })
     .catch((error) => {
       console.error('❌ Email failed for:', email);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
-      console.error('SMTP response:', error.response);
-      console.error('Command:', error.command);
+      
     });
    
 
 
   } catch (error) {
       console.error(" Errore durante il sign-up:", error);
-
-    res.status(500).json({ message: error.message });
+if (!res.headersSent){
+  res.status(500).json({ message: error.message });
+}
   }
 };
 
