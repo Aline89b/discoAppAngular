@@ -50,12 +50,13 @@ const addUser = async (req, res) => {
       }
     );
 
-    console.log(user);
 
     const verificationLink = `https://discoappangular-1.onrender.com/api/users/verify/${userId}/${token}`;
     await transport.sendMail({
       from: process.env.NODE_MAILER_ADDRESS,
       to: email,
+      connectionTimeout: 15000, 
+      greetingTimeout: 5000,
       subject: "verify your email",
       html: `<p>Please click the link below to verify your email:</p>
      <a href="${verificationLink}">Verify Email</a>`,

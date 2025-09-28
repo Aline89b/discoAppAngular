@@ -26,9 +26,12 @@ const clientURL = isProd
 const backendURL = isProd
   ? "https://discoappangular-1.onrender.com"
   : "http://localhost:3000";
+  
 
 // Middleware
-app.use(cors({ origin: [clientURL], credentials: true }));
+app.use(cors({ origin: [clientURL], credentials: true, methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization" }));
+app.options("*", cors());
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
