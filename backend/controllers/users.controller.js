@@ -86,9 +86,8 @@ const addUser = async (req, res) => {
 
   } catch (error) {
       console.error(" Errore durante il sign-up:", error);
-if (!res.headersSent){
   res.status(500).json({ message: error.message });
-}
+
   }
 };
 
